@@ -1,13 +1,14 @@
-import { useEffect, useRef } from "react";
-import StartGame from "./game/main.js";
+import { useRef } from "react";
 import { PhaserGame } from "./Phaser.jsx";
 
 export default function App() {
   const phaserRef = useRef(null);
-
+  
   return (
-    <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
-      <PhaserGame ref={phaserRef} />
+    <div className="app-container">
+      <div className="game-wrapper">
+        <PhaserGame ref={phaserRef} />
+      </div>
     </div>
   );
 }
