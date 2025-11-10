@@ -23,12 +23,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.jumpSpeed = 200;
     this.verticalSpeed = 200;
 
+    // Config for dash feature
+    this.dashSpeed = 800;
+    this.dashDuration = 250;
+    this.dashCooldown = 500;
+    this.isDashing = false;
+    this.canDash = true;
+    this.dashDirection = { x: 0, y: 0 };
+
     // Basic input keys
     this.keys = scene.input.keyboard.addKeys({
       up: "W",
       down: "S",
       left: "A",
       right: "D",
+      dash: "SPACE",
     });
 
     // Store scene reference
@@ -43,29 +52,104 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Updates for every movement
   update() {
+    this.handleDash();
     this.handleMovement();
     this.syncVisualBox();
   }
 
   // Handles player movement based off inputs
   handleMovement() {
-    // Reset velocity
-    this.setVelocity(0);
+    // This makes sure normal movement is disabled during dash
+    if (this.isDashing) {
+      return;
+    }
 
-    // Horizontal movement
+    // Calculate movement direction
+    let moveX = 0;
+    let moveY = 0;
+
+    // Horizontal
     if (this.keys.left.isDown) {
-      this.setVelocityX(-this.speed);
+      moveX = -1;
     }
     if (this.keys.right.isDown) {
-      this.setVelocityX(this.speed);
+      moveX = 1;
     }
 
-    // Vertical movement
+    // Vertical
     if (this.keys.up.isDown) {
-      this.setVelocityY(-this.speed - this.jumpSpeed);
+      moveY = -1;
     }
     if (this.keys.down.isDown) {
-      this.setVelocityY(this.speed + this.verticalSpeed);
+      moveY = 1;
+    }
+
+    // Normalize diagonal movement so it's not faster
+    const length = Math.sqrt(moveX * moveX + moveY * moveY);
+    if (length > 0) {
+      moveX /= length;
+      moveY /= length;
+    }
+
+    // Apply velocity with normalized direction
+    this.setVelocity(
+      moveX * this.speed,
+      moveY * (this.speed + this.verticalSpeed) // Keep your extra vertical speed
+    );
+  }
+
+  // Handles dash mechanic
+  handleDash() {
+    if (
+      Phaser.Input.Keyboard.JustDown(this.keys.dash) &&
+      this.canDash &&
+      !this.isDashing
+    ) {
+      let dashX = 0;
+      let dashY = 0;
+
+      if (this.keys.left.isDown) dashX = -1;
+      if (this.keys.right.isDown) dashX = 1;
+      if (this.keys.up.isDown) dashY = -1;
+      if (this.keys.down.isDown) dashY = 1;
+
+      // If no direction pressed, dash right by default
+      if (dashX === 0 && dashY === 0) {
+        dashX = 1;
+      }
+
+      // Normalize diagonal dashes so they're not faster
+      const length = Math.sqrt(dashX * dashX + dashY * dashY);
+      if (length > 0) {
+        dashX /= length;
+        dashY /= length;
+      }
+
+      // Store dash direction
+      this.dashDirection.x = dashX;
+      this.dashDirection.y = dashY;
+
+      // Start dash
+      this.isDashing = true;
+      this.canDash = false;
+
+      // Apply dash velocity
+      this.setVelocity(
+        this.dashDirection.x * this.dashSpeed,
+        this.dashDirection.y * this.dashSpeed
+      );
+
+      // End dash after duration
+      this.scene.time.delayedCall(this.dashDuration, () => {
+        this.isDashing = false;
+        this.setAlpha(1);
+        if (this.visualBox) this.visualBox.setAlpha(1);
+      });
+
+      // Reset cooldown
+      this.scene.time.delayedCall(this.dashCooldown, () => {
+        this.canDash = true;
+      });
     }
   }
 
