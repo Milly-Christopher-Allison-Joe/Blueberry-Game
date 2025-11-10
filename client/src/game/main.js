@@ -13,6 +13,13 @@ const config = {
   parent: "game-container",
   backgroundColor: "#028af8",
   scene: [Boot, Preloader, MainMenu, BossSelect, Plexus, GameOver],
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 0 },
+      debug: false,
+    },
+  },
 };
 
 const StartGame = (parent) => {
