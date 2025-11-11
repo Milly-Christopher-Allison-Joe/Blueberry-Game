@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { Player } from "../objects/Player";
+import { PlexusBoss } from "../objects/PlexusBoss";
 
 export class Plexus extends Scene {
   constructor() {
@@ -68,10 +69,16 @@ export class Plexus extends Scene {
     this.player = new Player(this, 200, worldHeight / 2);
     this.player.setupCamera(1.2);
 
+    // Create Boss near the far right of hallway
+    this.boss = new PlexusBoss(this, worldWidth - 300, worldHeight / 2);
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);
     this.physics.add.collider(this.player, this.bottomWall);
+
+    // Boss and Player collision
+    this.physics.add.collider(this.player, this.boss);
 
     EventBus.emit("current-scene-ready", this);
   }
@@ -82,6 +89,9 @@ export class Plexus extends Scene {
 
     // updates player
     this.player.update();
+
+    //updates boss
+    this.boss.update();
   }
 
   changeScene() {
