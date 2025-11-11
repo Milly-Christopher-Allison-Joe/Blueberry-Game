@@ -69,8 +69,11 @@ export class Plexus extends Scene {
     this.player = new Player(this, 200, worldHeight / 2);
     this.player.setupCamera(1.2);
 
-    // Create Boss near the far right of hallway
-    this.boss = new PlexusBoss(this, worldWidth - 300, worldHeight / 2);
+    // Create Boss in front of player at start
+    const bossX = this.player.x + 400;
+    const bossY = this.player.y;
+
+    this.boss = new PlexusBoss(this, bossX, bossY);
 
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
@@ -88,10 +91,10 @@ export class Plexus extends Scene {
     this.bg.tilePositionX = this.cameras.main.scrollX * 0.2;
 
     // updates player
-    this.player.update();
+    if (this.player) this.player.update();
 
     //updates boss
-    this.boss.update();
+    if (this.boss) this.boss.update();
   }
 
   changeScene() {
