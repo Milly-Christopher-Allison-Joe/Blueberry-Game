@@ -39,7 +39,7 @@ export class MainMenu extends Scene {
 
     // Input listener
     this.input.keyboard.once("keydown-SPACE", () => {
-      this.scene.start("Plexus");
+      this.scene.start("BossSelect");
     });
   }
 }

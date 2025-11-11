@@ -4,6 +4,7 @@ import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
+import { BossSelect } from "./scenes/BossSelect";
 
 const config = {
   type: Phaser.AUTO,
@@ -11,7 +12,14 @@ const config = {
   height: 768,
   parent: "game-container",
   backgroundColor: "#028af8",
-  scene: [Boot, Preloader, MainMenu, Plexus, GameOver],
+  scene: [Boot, Preloader, MainMenu, BossSelect, Plexus, GameOver],
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 0 },
+      debug: false,
+    },
+  },
 };
 
 const StartGame = (parent) => {
