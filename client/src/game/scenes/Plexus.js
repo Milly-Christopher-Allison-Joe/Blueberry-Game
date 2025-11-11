@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { Player } from "../../objects/Player";
+import { Player } from "../objects/Player";
 
 export class Plexus extends Scene {
   constructor() {
