@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 export function setupDash(player, scene, keys) {
   // Config for dash feature
   player.dashSpeed = 800;

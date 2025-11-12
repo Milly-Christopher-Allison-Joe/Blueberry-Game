@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { setupDash } from "../player-mechanics/Dash.js";
+import { setupMelee } from "../player-mechanics/Melee.js";
 
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -35,6 +36,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     // This is for the setupDash import!
     this.dashHandler = setupDash(this, scene, this.keys);
+    this.meleeHandler = setupMelee(this, scene, this.keys);
 
     // Mouse aiming properties
     this.aimAngle = 0;
@@ -42,6 +44,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Store scene reference
     this.scene = scene;
+
+    // This is to prevent the player from using a melee when selecting a boss
+    this.inputEnabled = false; // Disable input at first
+    // Inputs allowed after 300ms after player is created.
+    scene.time.delayedCall(300, () => {
+      this.inputEnabled = true;
+    });
   }
 
   // Sets up camera for player
@@ -52,10 +61,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Updates for every movement
   update() {
-    this.handleMouseAim();
-    this.dashHandler();
-    this.handleMovement();
-    this.syncVisualBox();
+    if (this.scene.scene.key === "Plexus") {
+      this.handleMouseAim();
+      this.dashHandler();
+      this.meleeHandler();
+      this.handleMovement();
+      this.syncVisualBox();
+    }
   }
 
   // Handles player movement based off inputs
