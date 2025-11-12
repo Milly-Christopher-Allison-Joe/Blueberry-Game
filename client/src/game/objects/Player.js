@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { setupDash } from "../player-mechanics/Dash.js";
 
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -23,14 +24,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.jumpSpeed = 200;
     this.verticalSpeed = 200;
 
-    // Config for dash feature
-    this.dashSpeed = 800;
-    this.dashDuration = 250;
-    this.dashCooldown = 500;
-    this.isDashing = false;
-    this.canDash = true;
-    this.dashDirection = { x: 0, y: 0 };
-
     // Basic input keys
     this.keys = scene.input.keyboard.addKeys({
       up: "W",
@@ -39,6 +32,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       right: "D",
       dash: "SPACE",
     });
+
+    this.dashHandler = setupDash(this, scene, this.keys);
 
     // Store scene reference
     this.scene = scene;
@@ -52,14 +47,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Updates for every movement
   update() {
-    this.handleDash();
+    this.dashHandler();
     this.handleMovement();
     this.syncVisualBox();
   }
 
   // Handles player movement based off inputs
   handleMovement() {
-    // This makes sure normal movement is disabled during dash
+    // Disables normal movement during dash
     if (this.isDashing) {
       return;
     }
@@ -96,61 +91,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       moveX * this.speed,
       moveY * (this.speed + this.verticalSpeed) // Keep your extra vertical speed
     );
-  }
-
-  // Handles dash mechanic
-  handleDash() {
-    if (
-      Phaser.Input.Keyboard.JustDown(this.keys.dash) &&
-      this.canDash &&
-      !this.isDashing
-    ) {
-      let dashX = 0;
-      let dashY = 0;
-
-      if (this.keys.left.isDown) dashX = -1;
-      if (this.keys.right.isDown) dashX = 1;
-      if (this.keys.up.isDown) dashY = -1;
-      if (this.keys.down.isDown) dashY = 1;
-
-      // If no direction pressed, dash right by default
-      if (dashX === 0 && dashY === 0) {
-        dashX = 1;
-      }
-
-      // Normalize diagonal dashes so they're not faster
-      const length = Math.sqrt(dashX * dashX + dashY * dashY);
-      if (length > 0) {
-        dashX /= length;
-        dashY /= length;
-      }
-
-      // Store dash direction
-      this.dashDirection.x = dashX;
-      this.dashDirection.y = dashY;
-
-      // Start dash
-      this.isDashing = true;
-      this.canDash = false;
-
-      // Apply dash velocity
-      this.setVelocity(
-        this.dashDirection.x * this.dashSpeed,
-        this.dashDirection.y * this.dashSpeed
-      );
-
-      // End dash after duration
-      this.scene.time.delayedCall(this.dashDuration, () => {
-        this.isDashing = false;
-        this.setAlpha(1);
-        if (this.visualBox) this.visualBox.setAlpha(1);
-      });
-
-      // Reset cooldown
-      this.scene.time.delayedCall(this.dashCooldown, () => {
-        this.canDash = true;
-      });
-    }
   }
 
   // Sync for visual box position with physics
