@@ -33,7 +33,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       dash: "SPACE",
     });
 
+    // This is for the setupDash import!
     this.dashHandler = setupDash(this, scene, this.keys);
+
+    // Mouse aiming properties
+    this.aimAngle = 0;
+    this.aimDirection = { x: 1, y: 0 };
 
     // Store scene reference
     this.scene = scene;
@@ -47,6 +52,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Updates for every movement
   update() {
+    this.handleMouseAim();
     this.dashHandler();
     this.handleMovement();
     this.syncVisualBox();
@@ -91,6 +97,22 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       moveX * this.speed,
       moveY * (this.speed + this.verticalSpeed) // Keep your extra vertical speed
     );
+  }
+
+  // Handles where the player is aiming based off mouse movements
+  handleMouseAim() {
+    const pointer = this.scene.input.activePointer;
+
+    this.aimAngle = Phaser.Math.Angle.Between(
+      this.x,
+      this.y,
+      pointer.worldX,
+      pointer.worldY
+    );
+
+    // Convert angle to normalized direction vector (Had help from stack overflow on this one)
+    this.aimDirection.x = Math.cos(this.aimAngle);
+    this.aimDirection.y = Math.sin(this.aimAngle);
   }
 
   // Sync for visual box position with physics
