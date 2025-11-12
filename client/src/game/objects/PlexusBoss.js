@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { DropCircle } from "./Plexus Mechanics/DropCircle";
 
 export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -24,6 +25,19 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     // sync the visuals to the body position
     this.visual.x = this.x;
     this.visual.y = this.y;
+  }
+
+  startDropCircleMechanic(player) {
+    if (this.isDropping) return;
+    this.isDropping = true;
+
+    // it takes 5 seconds until the circle drops
+    new DropCircle(this.scene, player, 5000);
+
+    // 30 second cooldown for the mechanic
+    this.scene.time.delayedCall(30000, () => {
+      this.isDropping = false;
+    });
   }
 
   destroy() {

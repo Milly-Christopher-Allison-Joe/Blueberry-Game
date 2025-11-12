@@ -75,6 +75,16 @@ export class Plexus extends Scene {
 
     this.boss = new PlexusBoss(this, bossX, bossY);
 
+    // Attack cycle loop for Drop Circle
+    this.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        if (!this.boss || !this.boss.isDropping) return;
+        this.boss.startDropCircleMechanic(this.player);
+      },
+    });
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);
