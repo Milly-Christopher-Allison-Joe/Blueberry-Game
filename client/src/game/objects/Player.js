@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { setupDash } from "../player-mechanics/Dash.js";
 import { setupMelee } from "../player-mechanics/Melee.js";
+import { setupRanged } from "../player-mechanics/Ranged.js";
 
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -32,11 +33,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       left: "A",
       right: "D",
       dash: "SPACE",
+      ranged: "F",
     });
 
     // This is for the setupDash import!
     this.dashHandler = setupDash(this, scene, this.keys);
-    this.meleeHandler = setupMelee(this, scene, this.keys);
+    this.meleeHandler = setupMelee(this, scene);
+    this.rangedHandler = setupRanged(this, scene);
 
     // Mouse aiming properties
     this.aimAngle = 0;
@@ -65,6 +68,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.handleMouseAim();
       this.dashHandler();
       this.meleeHandler();
+      this.rangedHandler();
       this.handleMovement();
       this.syncVisualBox();
     }
