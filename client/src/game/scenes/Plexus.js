@@ -80,7 +80,7 @@ export class Plexus extends Scene {
       delay: 1000,
       loop: true,
       callback: () => {
-        if (!this.boss || !this.boss.isDropping) return;
+        if (!this.boss || this.boss.isDropping) return;
         this.boss.startDropCircleMechanic(this.player);
       },
     });
