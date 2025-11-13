@@ -1,4 +1,7 @@
 import Phaser from "phaser";
+import { setupDash } from "../player-mechanics/Dash.js";
+import { setupMelee } from "../player-mechanics/Melee.js";
+import { setupRanged } from "../player-mechanics/Ranged.js";
 
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -23,14 +26,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.jumpSpeed = 200;
     this.verticalSpeed = 200;
 
-    // Config for dash feature
-    this.dashSpeed = 800;
-    this.dashDuration = 250;
-    this.dashCooldown = 500;
-    this.isDashing = false;
-    this.canDash = true;
-    this.dashDirection = { x: 0, y: 0 };
-
     // Basic input keys
     this.keys = scene.input.keyboard.addKeys({
       up: "W",
@@ -38,10 +33,27 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       left: "A",
       right: "D",
       dash: "SPACE",
+      ranged: "F",
     });
+
+    // This is for the setupDash import!
+    this.dashHandler = setupDash(this, scene, this.keys);
+    this.meleeHandler = setupMelee(this, scene);
+    this.rangedHandler = setupRanged(this, scene);
+
+    // Mouse aiming properties
+    this.aimAngle = 0;
+    this.aimDirection = { x: 1, y: 0 };
 
     // Store scene reference
     this.scene = scene;
+
+    // This is to prevent the player from using a melee when selecting a boss
+    this.inputEnabled = false; // Disable input at first
+    // Inputs allowed after 300ms after player is created.
+    scene.time.delayedCall(300, () => {
+      this.inputEnabled = true;
+    });
   }
 
   // Sets up camera for player
@@ -52,14 +64,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Updates for every movement
   update() {
-    this.handleDash();
-    this.handleMovement();
-    this.syncVisualBox();
+    if (this.scene.scene.key === "Plexus") {
+      this.handleMouseAim();
+      this.dashHandler();
+      this.meleeHandler();
+      this.rangedHandler();
+      this.handleMovement();
+      this.syncVisualBox();
+    }
   }
 
   // Handles player movement based off inputs
   handleMovement() {
-    // This makes sure normal movement is disabled during dash
+    // Disables normal movement during dash
     if (this.isDashing) {
       return;
     }
@@ -98,59 +115,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     );
   }
 
-  // Handles dash mechanic
-  handleDash() {
-    if (
-      Phaser.Input.Keyboard.JustDown(this.keys.dash) &&
-      this.canDash &&
-      !this.isDashing
-    ) {
-      let dashX = 0;
-      let dashY = 0;
+  // Handles where the player is aiming based off mouse movements
+  handleMouseAim() {
+    const pointer = this.scene.input.activePointer;
 
-      if (this.keys.left.isDown) dashX = -1;
-      if (this.keys.right.isDown) dashX = 1;
-      if (this.keys.up.isDown) dashY = -1;
-      if (this.keys.down.isDown) dashY = 1;
+    this.aimAngle = Phaser.Math.Angle.Between(
+      this.x,
+      this.y,
+      pointer.worldX,
+      pointer.worldY
+    );
 
-      // If no direction pressed, dash right by default
-      if (dashX === 0 && dashY === 0) {
-        dashX = 1;
-      }
-
-      // Normalize diagonal dashes so they're not faster
-      const length = Math.sqrt(dashX * dashX + dashY * dashY);
-      if (length > 0) {
-        dashX /= length;
-        dashY /= length;
-      }
-
-      // Store dash direction
-      this.dashDirection.x = dashX;
-      this.dashDirection.y = dashY;
-
-      // Start dash
-      this.isDashing = true;
-      this.canDash = false;
-
-      // Apply dash velocity
-      this.setVelocity(
-        this.dashDirection.x * this.dashSpeed,
-        this.dashDirection.y * this.dashSpeed
-      );
-
-      // End dash after duration
-      this.scene.time.delayedCall(this.dashDuration, () => {
-        this.isDashing = false;
-        this.setAlpha(1);
-        if (this.visualBox) this.visualBox.setAlpha(1);
-      });
-
-      // Reset cooldown
-      this.scene.time.delayedCall(this.dashCooldown, () => {
-        this.canDash = true;
-      });
-    }
+    // Convert angle to normalized direction vector (Had help from stack overflow on this one)
+    this.aimDirection.x = Math.cos(this.aimAngle);
+    this.aimDirection.y = Math.sin(this.aimAngle);
   }
 
   // Sync for visual box position with physics
