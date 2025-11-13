@@ -1,6 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { Player } from "../objects/Player";
+import { PlexusBoss } from "../objects/PlexusBoss";
 
 export class Plexus extends Scene {
   constructor() {
@@ -68,10 +69,29 @@ export class Plexus extends Scene {
     this.player = new Player(this, 200, worldHeight / 2);
     this.player.setupCamera(1.2);
 
+    // Create Boss in front of player at start
+    const bossX = this.player.x + 400;
+    const bossY = this.player.y;
+
+    this.boss = new PlexusBoss(this, bossX, bossY);
+
+    // Attack cycle loop for Drop Circle
+    this.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        if (!this.boss || this.boss.isDropping) return;
+        this.boss.startDropCircleMechanic(this.player);
+      },
+    });
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);
     this.physics.add.collider(this.player, this.bottomWall);
+
+    // Boss and Player collision
+    this.physics.add.collider(this.player, this.boss);
 
     EventBus.emit("current-scene-ready", this);
   }
@@ -81,7 +101,10 @@ export class Plexus extends Scene {
     this.bg.tilePositionX = this.cameras.main.scrollX * 0.2;
 
     // updates player
-    this.player.update();
+    if (this.player) this.player.update();
+
+    //updates boss
+    if (this.boss) this.boss.update();
   }
 
   changeScene() {
