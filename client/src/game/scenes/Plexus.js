@@ -2,6 +2,7 @@ import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { Player } from "../objects/Player";
 import { PlexusBoss } from "../objects/PlexusBoss";
+import { KillLine } from "../objects/Plexus Mechanics/KillLine";
 
 export class Plexus extends Scene {
   constructor() {
@@ -75,6 +76,9 @@ export class Plexus extends Scene {
 
     this.boss = new PlexusBoss(this, bossX, bossY);
 
+    // Create the kill line laser wall
+    this.killLine = new KillLine(this, bossX + 150, worldHeight / 2);
+
     // Attack cycle loop for Drop Circle
     this.time.addEvent({
       delay: 1000,
@@ -116,6 +120,9 @@ export class Plexus extends Scene {
 
     //updates boss
     if (this.boss) this.boss.update();
+
+    // update the kill line laser wall position to boss
+    if (this.killLine) this.killLine.update(this.boss);
   }
 
   changeScene() {
