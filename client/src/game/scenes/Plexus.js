@@ -85,6 +85,17 @@ export class Plexus extends Scene {
       },
     });
 
+    // Periodically trigger soak mechanic
+    this.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        if (this.boss && !this.boss.isSoaking) {
+          this.boss.startSoakMechanic(this.player);
+        }
+      },
+    });
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);

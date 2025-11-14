@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { DropCircle } from "./Plexus Mechanics/DropCircle";
+import { SoakCircle } from "./Plexus Mechanics/Soak";
 
 export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -37,6 +38,18 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     // 30 second cooldown for the mechanic
     this.scene.time.delayedCall(30000, () => {
       this.isDropping = false;
+    });
+  }
+
+  startSoakMechanic(player) {
+    if (this.isSoaking) return;
+    this.isSoaking = true;
+
+    new SoakCircle(this.scene, this, player, 5000);
+
+    // Cooldown before next soak allowed
+    this.scene.time.delayedCall(20000, () => {
+      this.isSoaking = false;
     });
   }
 
