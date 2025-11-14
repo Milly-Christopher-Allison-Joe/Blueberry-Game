@@ -100,6 +100,17 @@ export class Plexus extends Scene {
       },
     });
 
+    // Periodically trigger the kill sweep laser mechanic
+    this.time.addEvent({
+      delay: 100,
+      loop: true,
+      callback: () => {
+        if (this.boss && !this.boss.isSweeping) {
+          this.boss.startKillSweep(this.player);
+        }
+      },
+    });
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);

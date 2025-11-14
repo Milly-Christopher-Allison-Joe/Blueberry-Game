@@ -1,32 +1,40 @@
 import Phaser from "phaser";
 
 export class KillSweep {
-  constructor(scene, direction = "left-to-right", speed = 600, thickness = 20) {
+  constructor(
+    scene,
+    boss,
+    direction = "left-to-right",
+    speed = 300,
+    thickness = 20
+  ) {
     this.scene = scene;
 
     const worldWidth = 4000;
-    const worldHeight = 800;
 
-    const y = worldHeight / 2;
+    const sweepY = boss.y;
 
     // Start X based on direction
-    let startX = direction === "left-to-right" ? -50 : worldWidth + 50;
+    let startX = direction === "left-to-right" ? boss.x - 300 : boss.x + 300;
 
     this.line = scene.add.rectangle(
       startX,
-      y,
+      sweepY,
       thickness,
-      worldHeight,
+      500,
       0xff3300,
       0.4
     );
     this.line.setDepth(60);
 
     // Physics zone
-    this.zone = scene.add.zone(startX, y, thickness, worldHeight);
+    this.zone = scene.add.zone(startX, sweepY, thickness, 500);
     scene.physics.add.existing(this.zone);
     this.zone.body.setAllowGravity(false);
-    this.zone.body.moves = false;
+
+    // Enable physics body for the line
+    this.scene.physics.world.enable(this.line);
+    this.line.body.setAllowGravity(false);
 
     // Kill the player on contact
     this.collider = scene.physics.add.overlap(scene.player, this.zone, () => {
@@ -35,7 +43,6 @@ export class KillSweep {
 
     // Moving the kill line
     const velocity = direction === "left-to-right" ? speed : -speed;
-    this.scene.physics.world.enable(this.line);
     this.line.body.setVelocityX(velocity);
     this.zone.body.setVelocityX(velocity);
 
@@ -49,6 +56,15 @@ export class KillSweep {
         }
       },
     });
+  }
+
+  update() {
+    // keep zone aligned with visual line
+    this.zone.x = this.line.x;
+    this.zone.y = this.line.y;
+
+    this.zone.body.x = this.line.body.x;
+    this.zone.body.y = this.line.body.y;
   }
 
   destroy() {
