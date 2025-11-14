@@ -38,7 +38,9 @@ export class KillSweep {
 
     // Kill the player on contact
     this.collider = scene.physics.add.overlap(scene.player, this.zone, () => {
-      scene.scene.start("GameOver");
+      if (scene.player.damageHandler) {
+        scene.player.damageHandler.takeDamage(100);
+      }
     });
 
     // Moving the kill line
