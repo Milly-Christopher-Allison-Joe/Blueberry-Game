@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import { DropCircle } from "./Plexus Mechanics/DropCircle";
+import { SoakCircle } from "./Plexus Mechanics/Soak";
+import { KillSweep } from "./Plexus Mechanics/KillSweep";
 
 export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -37,6 +39,30 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     // 30 second cooldown for the mechanic
     this.scene.time.delayedCall(30000, () => {
       this.isDropping = false;
+    });
+  }
+
+  startSoakMechanic(player) {
+    if (this.isSoaking) return;
+    this.isSoaking = true;
+
+    new SoakCircle(this.scene, this, player, 5000);
+
+    // Cooldown before next soak allowed
+    this.scene.time.delayedCall(20000, () => {
+      this.isSoaking = false;
+    });
+  }
+
+  startKillSweep(player) {
+    if (this.isSweeping) return;
+    this.isSweeping = true;
+
+    new KillSweep(this.scene, this, "right-to-left", 300, 20);
+
+    //Cooldown before next
+    this.scene.time.delayedCall(15000, () => {
+      this.isSweeping = false;
     });
   }
 
