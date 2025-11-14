@@ -2,6 +2,10 @@ import Phaser from "phaser";
 import { setupDash } from "../player-mechanics/Dash.js";
 import { setupMelee } from "../player-mechanics/Melee.js";
 import { setupRanged } from "../player-mechanics/Ranged.js";
+import { PlayerHealth } from "../UI/PlayerHealth.js";
+import { setupHeal } from "../player-mechanics/Heal.js";
+import { Damage } from "../player-mechanics/Damage.js";
+import { PlayerAbilityIcons } from "../UI/PlayerAbilityIcons.js";
 
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
@@ -21,6 +25,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.visualBox = scene.add.rectangle(x, y, 20, 20, 0xffffff);
     this.visualBox.setDepth(20);
 
+    // Health/Damage handler
+    this.damageHandler = new Damage(this, 100);
+
+    // Visual for health bar
+    this.healthBar = new PlayerHealth(scene, this);
+
+    // UI for player abilities
+    this.playerAbilityIcons = new PlayerAbilityIcons(scene, this);
+
     // Movement configuration
     this.speed = 200;
     this.jumpSpeed = 200;
@@ -34,12 +47,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       right: "D",
       dash: "SPACE",
       ranged: "F",
+      heal: "Q",
+      testDamage: "T",
     });
 
-    // This is for the setupDash import!
+    // Handlers for all player mechanics
     this.dashHandler = setupDash(this, scene, this.keys);
     this.meleeHandler = setupMelee(this, scene);
     this.rangedHandler = setupRanged(this, scene);
+    this.healHandler = setupHeal(this, scene);
 
     // Mouse aiming properties
     this.aimAngle = 0;
@@ -66,11 +82,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   update() {
     if (this.scene.scene.key === "Plexus") {
       this.handleMouseAim();
-      this.dashHandler();
+      this.dashHandler(this.scene.game.loop.delta); // Updated for dash UI
       this.meleeHandler();
-      this.rangedHandler();
+      this.rangedHandler(this.scene.game.loop.delta); // Updated for ranged UI
       this.handleMovement();
       this.syncVisualBox();
+      this.healHandler(this.scene.game.loop.delta); // Updated for heal UI
+      this.healthBar.setPosition(this.x, this.y);
+      this.playerAbilityIcons.update();
+      // THIS IS JUST FOR TESTING HEALING AND DAMAGE
+      if (Phaser.Input.Keyboard.JustDown(this.keys.testDamage)) {
+        this.damageHandler.takeDamage(20);
+        this.healthBar.update();
+      }
     }
   }
 
