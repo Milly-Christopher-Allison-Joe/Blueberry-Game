@@ -5,6 +5,10 @@ export class Damage {
     this.currentHealth = maxHealth;
   }
   takeDamage(amount) {
+    // Makes player immune during dash
+    if (this.player.isDashing) {
+      return;
+    }
     // This handles damage to the players health
     this.currentHealth = Math.max(this.currentHealth - amount, 0);
     if (this.currentHealth === 0) {

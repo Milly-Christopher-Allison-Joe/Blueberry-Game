@@ -9,12 +9,31 @@ export function setupDash(player, scene, keys) {
   player.canDash = true;
   player.dashDirection = { x: 0, y: 0 };
 
-  // Handles dash mechanic
-  return function handleDash() {
+  // New Cooldown state for UI
+  let cooldown = 0;
+  const maxCooldown = player.dashCooldown;
+
+  // Functions so the UI can check the cooldown
+  player.getDashCooldown = function () {
+    return cooldown;
+  };
+  player.getDashMaxCooldown = function () {
+    return maxCooldown;
+  };
+
+  // Handles dash mechanic NEW DELTA: Setup for time since last frame. Needed for cooldown timer.
+  return function handleDash(delta) {
+    // Cooldown timer if about 0
+    if (cooldown > 0) {
+      cooldown -= delta;
+      if (cooldown < 0) cooldown = 0; // Stops countdown from going below 0.
+    }
+    // Base function for dash
     if (
       Phaser.Input.Keyboard.JustDown(keys.dash) &&
       player.canDash &&
-      !player.isDashing
+      !player.isDashing &&
+      cooldown === 0 // Can only dash if cooldown is 0!!
     ) {
       let dashX = 0;
       let dashY = 0;
@@ -61,6 +80,9 @@ export function setupDash(player, scene, keys) {
       scene.time.delayedCall(player.dashCooldown, () => {
         player.canDash = true;
       });
+
+      // Start the cooldown timer
+      cooldown = maxCooldown;
     }
   };
 }
