@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export class DropCircle {
-  constructor(scene, player, duration = 2000, poolRadius = 60) {
+  constructor(scene, player, duration = 2000, poolRadius = 90) {
     this.scene = scene;
     this.player = player;
     this.duration = duration;

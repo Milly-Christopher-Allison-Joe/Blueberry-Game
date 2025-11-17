@@ -34,10 +34,10 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     this.isDropping = true;
 
     // it takes 5 seconds until the circle drops
-    new DropCircle(this.scene, player, 5000);
+    new DropCircle(this.scene, player, 3000);
 
     // 30 second cooldown for the mechanic
-    this.scene.time.delayedCall(30000, () => {
+    this.scene.time.delayedCall(5000, () => {
       this.isDropping = false;
     });
   }
