@@ -108,6 +108,14 @@ export class Plexus extends Scene {
       this.startNextPhase();
     });
 
+    // DEBUG: Press L to jump to Phase 3
+    this.input.keyboard.on("keydown-L", () => {
+      console.warn("DEBUG: Skipping to Phase 4");
+      this.currentPhase = 4;
+      this.phaseActive = false;
+      this.startNextPhase();
+    });
+
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
     this.physics.add.collider(this.player, this.topWall);
@@ -155,6 +163,10 @@ export class Plexus extends Scene {
 
       case 3:
         this.runPhase3();
+        break;
+
+      case 4:
+        this.runPhase4();
         break;
     }
   }
@@ -355,6 +367,34 @@ export class Plexus extends Scene {
       });
     };
     runCycle();
+  }
+
+  // This is the end. The last chance to kill the boss before endless KillSweeps
+  runPhase4() {
+    console.log("Phase 4 is starting");
+
+    this.clearPhaseTimers();
+
+    //Here is laser wall hell
+    this.schedulePhaseEvent(0, () => {
+      this.boss.startKillSweep();
+    });
+
+    this.schedulePhaseEvent(5000, () => {
+      this.boss.startKillSweep();
+    });
+
+    this.schedulePhaseEvent(8000, () => {
+      this.boss.startKillSweep();
+
+      this.schedulePhaseRepeatingEvent({
+        delay: 2000,
+        repeat: 20,
+        callback: () => {
+          this.boss.startKillSweep(this.player);
+        },
+      });
+    });
   }
 
   update() {
