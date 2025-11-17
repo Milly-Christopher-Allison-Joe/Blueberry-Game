@@ -45,7 +45,31 @@ export class DropCircle {
     );
     pool.setDepth(10);
 
-    // Will add the damage logic later
+    // Damage Zone logic
+    this.zone = this.scene.add.zone(
+      pool.x,
+      pool.y,
+      this.poolRadius * 2,
+      this.poolRadius * 2
+    );
+    this.scene.physics.add.existing(this.zone);
+    this.zone.body.setAllowGravity(false);
+    this.zone.body.moves = false;
+
+    // the damage is ticking and not single hit
+    let canDamage = true;
+
+    this.collider = this.scene.physics.add.overlap(
+      this.player,
+      this.zone,
+      () => {
+        if (canDamage && this.player.damageHandler) {
+          this.player.damageHandler.takeDamage(10);
+          canDamage = false;
+          this.scene.time.delayedCall(1000, () => (canDamage = true));
+        }
+      }
+    );
   }
 
   destroy() {
