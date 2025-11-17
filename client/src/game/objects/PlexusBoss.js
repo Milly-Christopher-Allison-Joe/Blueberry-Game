@@ -66,6 +66,18 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
+  reverseKillSweep() {
+    if (this.isSweeping) return;
+    this.isSweeping = true;
+
+    new KillSweep(this.scene, this, "left-to-right", 300, 20);
+
+    //Cooldown before next
+    this.scene.time.delayedCall(0, () => {
+      this.isSweeping = false;
+    });
+  }
+
   moveTo(x, y, duration = 2000) {
     return this.scene.tweens.add({
       targets: [this, this.visual],
