@@ -33,11 +33,11 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     if (this.isDropping) return;
     this.isDropping = true;
 
-    // it takes 5 seconds until the circle drops
+    // it takes 3 seconds until the circle drops
     new DropCircle(this.scene, player, 3000);
 
-    // 30 second cooldown for the mechanic
-    this.scene.time.delayedCall(5000, () => {
+    // 3 second cooldown for the mechanic
+    this.scene.time.delayedCall(0, () => {
       this.isDropping = false;
     });
   }
@@ -49,7 +49,7 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     new SoakCircle(this.scene, this, player, 5000);
 
     // Cooldown before next soak allowed
-    this.scene.time.delayedCall(20000, () => {
+    this.scene.time.delayedCall(0, () => {
       this.isSoaking = false;
     });
   }
@@ -61,8 +61,18 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     new KillSweep(this.scene, this, "right-to-left", 300, 20);
 
     //Cooldown before next
-    this.scene.time.delayedCall(15000, () => {
+    this.scene.time.delayedCall(0, () => {
       this.isSweeping = false;
+    });
+  }
+
+  moveTo(x, y, duration = 2000) {
+    return this.scene.tweens.add({
+      targets: [this, this.visual],
+      x: x,
+      y: y,
+      duration: duration,
+      ease: "Power2",
     });
   }
 

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export class DropCircle {
-  constructor(scene, player, duration = 2000, poolRadius = 90) {
+  constructor(scene, player, duration, poolRadius = 90) {
     this.scene = scene;
     this.player = player;
     this.duration = duration;
@@ -67,6 +67,7 @@ export class DropCircle {
           this.player.damageHandler.takeDamage(10);
           canDamage = false;
           this.scene.time.delayedCall(1000, () => (canDamage = true));
+          this.player.healthBar.update();
         }
       }
     );

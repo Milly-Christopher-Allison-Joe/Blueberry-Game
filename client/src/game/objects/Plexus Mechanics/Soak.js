@@ -43,7 +43,7 @@ export class SoakCircle {
     // damage logic on successful soak
     if (this.player.damageHandler) {
       this.player.damageHandler.takeDamage(30);
-      console.log("Damage taken");
+      this.player.healthBar.update();
     }
 
     // Success

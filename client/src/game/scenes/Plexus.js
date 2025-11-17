@@ -15,6 +15,12 @@ export class Plexus extends Scene {
     const hallwayY = worldHeight / 2;
     const hallwayHeight = 500;
 
+    // This is for the phases so I don't have to rewrite every call of the stuff above
+    this.worldWidth = worldWidth;
+    this.worldHeight = worldHeight;
+    this.hallwayY = hallwayY;
+    this.hallwayHeight = hallwayHeight;
+
     // camera and physics boundaries
     this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
@@ -85,37 +91,13 @@ export class Plexus extends Scene {
     // Create the kill line laser wall
     this.killLine = new KillLine(this, bossX + 150, worldHeight / 2);
 
-    // // Attack cycle loop for Drop Circle
-    // this.time.addEvent({
-    //   delay: 1000,
-    //   loop: true,
-    //   callback: () => {
-    //     if (!this.boss || this.boss.isDropping) return;
-    //     this.boss.startDropCircleMechanic(this.player);
-    //   },
-    // });
-
-    // // Periodically trigger soak mechanic
-    // this.time.addEvent({
-    //   delay: 1000,
-    //   loop: true,
-    //   callback: () => {
-    //     if (this.boss && !this.boss.isSoaking) {
-    //       this.boss.startSoakMechanic(this.player);
-    //     }
-    //   },
-    // });
-
-    // // Periodically trigger the kill sweep laser mechanic
-    // this.time.addEvent({
-    //   delay: 100,
-    //   loop: true,
-    //   callback: () => {
-    //     if (this.boss && !this.boss.isSweeping) {
-    //       this.boss.startKillSweep(this.player);
-    //     }
-    //   },
-    // });
+    // DEBUG: Press P to jump to Phase 2
+    this.input.keyboard.on("keydown-P", () => {
+      console.warn("DEBUG: Skipping to Phase 2");
+      this.currentPhase = 2;
+      this.phaseActive = false;
+      this.startNextPhase();
+    });
 
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
@@ -171,7 +153,7 @@ export class Plexus extends Scene {
       });
 
       // End of cycle. Repeat then next phase
-      this.time.delayedCall(38000, () => {
+      this.time.delayedCall(41000, () => {
         cycleCount++;
 
         if (cycleCount < 2) {
@@ -184,6 +166,79 @@ export class Plexus extends Scene {
       });
     };
 
+    runCycle();
+  }
+
+  runPhase2() {
+    console.log("Phase 2 is starting");
+
+    this.time.clearPendingEvents();
+    this.time.removeAllEvents();
+
+    const targetX = this.worldWidth / 2;
+    const targetY = this.hallwayY;
+
+    this.boss.moveTo(targetX, targetY, 2000);
+
+    this.time.delayedCall(2200, () => {
+      this.startPhase2Timeline();
+    });
+  }
+
+  startPhase2Timeline() {
+    let cycleCount = 0;
+
+    // spawning a killwall behind the player to block off the arena
+    this.time.delayedCall(8000, () => {
+      const wallOffSet = 600;
+
+      this.backKillLine = new KillLine(
+        this,
+        this.boss.x - wallOffSet,
+        this.worldHeight / 2
+      );
+    });
+
+    const runCycle = () => {
+      // first kill sweep at 0 seconds as the player follows after the boss
+      this.time.delayedCall(0, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // Three drop circle mechanics at 0, 5, 10 seconds
+      this.time.delayedCall(0, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+      this.time.delayedCall(5000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+      this.time.delayedCall(10000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+
+      // soak mechanic at 15 seconds
+      this.time.delayedCall(15000, () => {
+        this.boss.startSoakMechanic(this.player);
+      });
+
+      // kill sweep mechanic at 23 seconds
+      this.time.delayedCall(23000, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // cycle logic
+      this.time.delayedCall(25000, () => {
+        cycleCount++;
+
+        if (cycleCount < 3) {
+          runCycle();
+        } else {
+          this.currentPhase = 3;
+          this.phaseActive = false;
+          this.startNextPhase();
+        }
+      });
+    };
     runCycle();
   }
 
