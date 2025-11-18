@@ -54,7 +54,7 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  startKillSweep(player) {
+  startKillSweep() {
     if (this.isSweeping) return;
     this.isSweeping = true;
 
