@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -21,7 +21,7 @@ export default function Login() {
   };
 
   return (
-    <>
+    <main className="login-page">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -39,6 +39,14 @@ export default function Login() {
         />
         <button>Login</button>
       </form>
-    </>
+
+      {/* link the login page to register in case user does not have a current account  */}
+      <p className="link">
+        Don't have an account?{" "}
+        <Link to="/register" className="links">
+          Register here
+        </Link>
+      </p>
+    </main>
   );
 }

@@ -21,7 +21,7 @@ export class MainMenu extends Scene {
 
     // Title text
     this.add
-      .text(width / 2, height / 2 - 100, "BlueBerry Game", {
+      .text(width / 2, height / 2 - 100, "Blueberry Game", {
         fontFamily: "Arial",
         fontSize: "48px",
         color: "#ffffff",

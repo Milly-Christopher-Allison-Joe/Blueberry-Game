@@ -1,3 +1,13 @@
+import React, { useRef } from "react";
+import { PhaserGame } from "../Phaser.jsx";
+
 export default function Home() {
-  return <h1>Home</h1>;
+  const phaserRef = useRef(null);
+  return (
+    <>
+      <div className="app-container">
+        <PhaserGame ref={phaserRef} />
+      </div>
+    </>
+  );
 }
