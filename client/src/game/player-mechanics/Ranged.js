@@ -6,6 +6,16 @@ export function setupRanged(player, scene) {
 
   player.prevPointerDownRanged = false;
 
+  // This sets world bounds for projectile
+  if (!scene.projectileWorldBoundsHandler) {
+    scene.physics.world.on("worldbounds", (body) => {
+      if (body.gameObject && body.gameObject.active) {
+        body.gameObject.destroy();
+      }
+    });
+    scene.projectileWorldBoundsHandler = true; // This prevents duplicate handlers
+  }
+
   // New Cooldown state for UI
   let cooldown = 0;
   const maxCooldown = player.rangedCooldown;
@@ -38,11 +48,25 @@ export function setupRanged(player, scene) {
         player.aimDirection.y * player.projectileSpeed
       );
 
-      // NEED TO ADD PROJECTILE COLLISION AND DESTROY
+      // Destroys projectile on boss contact
+      scene.physics.add.overlap(projectile, scene.boss, () => {
+        projectile.destroy();
+        // Can add more boss logic here if needed
+      });
+
+      // Destroys projectile on contact with anything out of bounds
+      projectile.body.setCollideWorldBounds(true);
+      projectile.body.onWorldBounds = true;
+      scene.physics.add.collider(projectile, scene.topWall, () => {
+        projectile.destroy();
+      });
+      scene.physics.add.collider(projectile, scene.bottomWall, () => {
+        projectile.destroy();
+      });
 
       // Cooldown
       player.canShoot = false;
-      scene.time.delayedCall(player.shootCooldown, () => {
+      scene.time.delayedCall(player.rangedCooldown, () => {
         player.canShoot = true;
       });
 
