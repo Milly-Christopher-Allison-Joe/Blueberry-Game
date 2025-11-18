@@ -19,7 +19,9 @@ export class SoakCircle {
     this.circle.setDepth(40);
 
     //Invisible body for physics and overlap detection with player
-    this.zone = scene.add.zone(spawnX, spawnY, radius * 2, radius * 2);
+    this.zone = scene.add
+      .zone(spawnX, spawnY, radius * 2, radius * 2)
+      .setOrigin(0.5, 0.5);
     scene.physics.add.existing(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
