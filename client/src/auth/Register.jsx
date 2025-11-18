@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -14,7 +15,7 @@ export default function Register() {
   };
 
   return (
-    <>
+    <main className="register-page">
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -32,6 +33,15 @@ export default function Register() {
         />
         <button>Sign up</button>
       </form>
-    </>
+
+      {/* linking register page to login page in case user already has an account  */}
+
+      <p className="link">
+        Already have an account?{" "}
+        <Link to="/login" className="links">
+          Login here
+        </Link>
+      </p>
+    </main>
   );
 }
