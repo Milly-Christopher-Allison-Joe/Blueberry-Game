@@ -15,7 +15,7 @@ export class KillSweep {
     const sweepY = boss.y;
 
     // Start X based on direction
-    let startX = direction === "left-to-right" ? boss.x - 300 : boss.x + 300;
+    let startX = direction === "left-to-right" ? boss.x - 1500 : boss.x + 300;
 
     this.line = scene.add.rectangle(
       startX,

@@ -15,6 +15,12 @@ export class Plexus extends Scene {
     const hallwayY = worldHeight / 2;
     const hallwayHeight = 500;
 
+    // This is for the phases so I don't have to rewrite every call of the stuff above
+    this.worldWidth = worldWidth;
+    this.worldHeight = worldHeight;
+    this.hallwayY = hallwayY;
+    this.hallwayHeight = hallwayHeight;
+
     // camera and physics boundaries
     this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
@@ -76,39 +82,38 @@ export class Plexus extends Scene {
 
     this.boss = new PlexusBoss(this, bossX, bossY);
 
+    // Initial Phase Logic
+    this.currentPhase = 1;
+    this.phaseActive = false;
+    this.phaseTimers = [];
+
+    this.startNextPhase();
+
     // Create the kill line laser wall
     this.killLine = new KillLine(this, bossX + 150, worldHeight / 2);
 
-    // Attack cycle loop for Drop Circle
-    this.time.addEvent({
-      delay: 1000,
-      loop: true,
-      callback: () => {
-        if (!this.boss || this.boss.isDropping) return;
-        this.boss.startDropCircleMechanic(this.player);
-      },
+    // DEBUG: Press P to jump to Phase 2
+    this.input.keyboard.on("keydown-P", () => {
+      console.warn("DEBUG: Skipping to Phase 2");
+      this.currentPhase = 2;
+      this.phaseActive = false;
+      this.startNextPhase();
     });
 
-    // Periodically trigger soak mechanic
-    this.time.addEvent({
-      delay: 1000,
-      loop: true,
-      callback: () => {
-        if (this.boss && !this.boss.isSoaking) {
-          this.boss.startSoakMechanic(this.player);
-        }
-      },
+    // DEBUG: Press O to jump to Phase 3
+    this.input.keyboard.on("keydown-O", () => {
+      console.warn("DEBUG: Skipping to Phase 3");
+      this.currentPhase = 3;
+      this.phaseActive = false;
+      this.startNextPhase();
     });
 
-    // Periodically trigger the kill sweep laser mechanic
-    this.time.addEvent({
-      delay: 100,
-      loop: true,
-      callback: () => {
-        if (this.boss && !this.boss.isSweeping) {
-          this.boss.startKillSweep(this.player);
-        }
-      },
+    // DEBUG: Press L to jump to Phase 3
+    this.input.keyboard.on("keydown-L", () => {
+      console.warn("DEBUG: Skipping to Phase 4");
+      this.currentPhase = 4;
+      this.phaseActive = false;
+      this.startNextPhase();
     });
 
     // Collision between Hallway and Player
@@ -120,6 +125,276 @@ export class Plexus extends Scene {
     this.physics.add.collider(this.player, this.boss);
 
     EventBus.emit("current-scene-ready", this);
+  }
+
+  // Managing Timers of Phases
+  schedulePhaseEvent(delay, callback) {
+    const t = this.time.delayedCall(delay, callback);
+    this.phaseTimers.push(t);
+    return t;
+  }
+
+  schedulePhaseRepeatingEvent(config) {
+    const evt = this.time.addEvent(config);
+    this.phaseTimers.push(evt);
+    return evt;
+  }
+
+  clearPhaseTimers() {
+    for (const t of this.phaseTimers) {
+      t.remove(false);
+    }
+    this.phaseTimers = [];
+  }
+
+  // Setting up the order of phases and the starting of them
+  startNextPhase() {
+    if (this.phaseActive) return;
+    this.phaseActive = true;
+
+    switch (this.currentPhase) {
+      case 1:
+        this.runPhase1();
+        break;
+
+      case 2:
+        this.runPhase2();
+        break;
+
+      case 3:
+        this.runPhase3();
+        break;
+
+      case 4:
+        this.runPhase4();
+        break;
+    }
+  }
+
+  // Start of Phase 1 and Timeline sequencing
+  runPhase1() {
+    let cycleCount = 0;
+
+    const runCycle = () => {
+      // Running 3 drop circle mechanics first
+      this.schedulePhaseRepeatingEvent({
+        delay: 8000,
+        repeat: 2,
+        callback: () => {
+          this.boss.startDropCircleMechanic(this.player);
+        },
+      });
+
+      // A soak mechanic after the 3 drop circles
+      this.schedulePhaseEvent(32000, () => {
+        this.boss.startSoakMechanic(this.player);
+      });
+
+      // KillSweep after soak mechanic
+      this.schedulePhaseEvent(38000, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // End of cycle. Repeat then next phase
+      this.schedulePhaseEvent(41000, () => {
+        cycleCount++;
+
+        if (cycleCount < 2) {
+          runCycle();
+        } else {
+          this.currentPhase = 2;
+          this.phaseActive = false;
+          this.startNextPhase();
+        }
+      });
+    };
+
+    runCycle();
+  }
+
+  // Starting of Phase 2
+  runPhase2() {
+    console.log("Phase 2 is starting");
+
+    this.clearPhaseTimers();
+
+    const targetX = this.worldWidth / 2;
+    const targetY = this.hallwayY;
+
+    this.boss.moveTo(targetX, targetY, 2000);
+
+    this.schedulePhaseEvent(2200, () => {
+      this.startPhase2Timeline();
+    });
+  }
+
+  // Timeline sequencing of Phase 2 after Boss Movement
+  startPhase2Timeline() {
+    let cycleCount = 0;
+
+    // spawning a killwall behind the player to block off the arena
+    this.schedulePhaseEvent(8000, () => {
+      const wallOffSet = 600;
+
+      this.backKillLine = new KillLine(
+        this,
+        this.boss.x - wallOffSet,
+        this.worldHeight / 2
+      );
+    });
+
+    const runCycle = () => {
+      // first kill sweep at 0 seconds as the player follows after the boss
+      this.schedulePhaseEvent(0, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // Three drop circle mechanics at 0, 5, 10 seconds
+      this.schedulePhaseEvent(0, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+      this.schedulePhaseEvent(5000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+      this.schedulePhaseEvent(10000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+
+      // soak mechanic at 15 seconds
+      this.schedulePhaseEvent(15000, () => {
+        this.boss.startSoakMechanic(this.player);
+      });
+
+      // kill sweep mechanic at 23 seconds
+      this.schedulePhaseEvent(23000, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // cycle logic
+      this.schedulePhaseEvent(25000, () => {
+        cycleCount++;
+
+        if (cycleCount < 3) {
+          runCycle();
+        } else {
+          this.currentPhase = 3;
+          this.phaseActive = false;
+          this.startNextPhase();
+        }
+      });
+    };
+    runCycle();
+  }
+
+  // Starting of Phase 3
+  runPhase3() {
+    console.log("Phase 3 is starting");
+
+    this.clearPhaseTimers();
+
+    const targetX = this.worldWidth - 200;
+    const targetY = this.hallwayY;
+
+    this.boss.moveTo(targetX, targetY, 2500);
+
+    this.schedulePhaseEvent(1500, () => {
+      this.startPhase3Timeline();
+    });
+  }
+
+  // Timeline of Phase 3 after boss movement
+  startPhase3Timeline() {
+    let cycleCount = 0;
+
+    // spawning a killwall behind the player to block off the arena
+    this.schedulePhaseEvent(9000, () => {
+      const wallOffSet = 600;
+
+      this.backKillLine = new KillLine(
+        this,
+        this.boss.x - wallOffSet,
+        this.worldHeight / 2
+      );
+    });
+
+    const runCycle = () => {
+      // Kill sweep at start
+      this.schedulePhaseEvent(0, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // Drop circle at start
+      this.schedulePhaseEvent(0, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+
+      // Soak at 5 seconds
+      this.schedulePhaseEvent(5000, () => {
+        this.boss.startSoakMechanic(this.player);
+      });
+
+      // Drop circle at 8 seconds
+      this.schedulePhaseEvent(8000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+
+      // Reverse Kill Sweep at 10 seconds
+      this.schedulePhaseEvent(10000, () => {
+        this.boss.reverseKillSweep(this.player);
+      });
+
+      // Drop circle at 13 seconds
+      this.schedulePhaseEvent(13000, () => {
+        this.boss.startDropCircleMechanic(this.player);
+      });
+
+      // Kill sweep at 18 seconds
+      this.schedulePhaseEvent(18000, () => {
+        this.boss.startKillSweep(this.player);
+      });
+
+      // Cycle restart
+      this.schedulePhaseEvent(23000, () => {
+        cycleCount++;
+
+        if (cycleCount < 4) {
+          runCycle();
+        } else {
+          this.currentPhase = 4;
+          this.phaseActive = false;
+          this.startNextPhase();
+        }
+      });
+    };
+    runCycle();
+  }
+
+  // This is the end. The last chance to kill the boss before endless KillSweeps
+  runPhase4() {
+    console.log("Phase 4 is starting");
+
+    this.clearPhaseTimers();
+
+    //Here is laser wall hell
+    this.schedulePhaseEvent(0, () => {
+      this.boss.startKillSweep();
+    });
+
+    this.schedulePhaseEvent(5000, () => {
+      this.boss.startKillSweep();
+    });
+
+    this.schedulePhaseEvent(8000, () => {
+      this.boss.startKillSweep();
+
+      this.schedulePhaseRepeatingEvent({
+        delay: 2000,
+        repeat: 20,
+        callback: () => {
+          this.boss.startKillSweep(this.player);
+        },
+      });
+    });
   }
 
   update() {

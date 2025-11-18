@@ -19,7 +19,9 @@ export class SoakCircle {
     this.circle.setDepth(40);
 
     //Invisible body for physics and overlap detection with player
-    this.zone = scene.add.zone(spawnX, spawnY, radius * 2, radius * 2);
+    this.zone = scene.add
+      .zone(spawnX, spawnY, radius * 2, radius * 2)
+      .setOrigin(0.5, 0.5);
     scene.physics.add.existing(this.zone);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
@@ -39,24 +41,29 @@ export class SoakCircle {
       console.warn("Player failed to soak!");
       this.scene.scene.start("GameOver"); // placeholder death logic
       return;
-    } else {
-      // Success
-      const flash = this.scene.add.circle(
-        this.circle.x,
-        this.circle.y,
-        this.radius,
-        0x00ff00,
-        0.4
-      );
-      flash.setDepth(50);
-      this.scene.tweens.add({
-        targets: flash,
-        alpha: { from: 0.8, to: 0 },
-        scale: { from: 1, to: 2 },
-        duration: 800,
-        onComplete: () => flash.destroy(),
-      });
     }
+    // damage logic on successful soak
+    if (this.player.damageHandler) {
+      this.player.damageHandler.takeDamage(30);
+      this.player.healthBar.update();
+    }
+
+    // Success
+    const flash = this.scene.add.circle(
+      this.circle.x,
+      this.circle.y,
+      this.radius,
+      0x00ff00,
+      0.4
+    );
+    flash.setDepth(50);
+    this.scene.tweens.add({
+      targets: flash,
+      alpha: { from: 0.8, to: 0 },
+      scale: { from: 1, to: 2 },
+      duration: 800,
+      onComplete: () => flash.destroy(),
+    });
 
     //clean up
     this.circle.destroy();
