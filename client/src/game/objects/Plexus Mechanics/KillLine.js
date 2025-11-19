@@ -19,7 +19,7 @@ export class KillLine {
       scene.player,
       this.zone,
       () => {
-        scene.scene.start("GameOver");
+        scene.changeScene();
       }
     );
   }

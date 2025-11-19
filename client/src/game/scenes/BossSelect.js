@@ -29,7 +29,7 @@ export class BossSelect extends Phaser.Scene {
     // list of bosses, can be expanded
     const bosses = [
       { name: "Plexus Sentinel", sceneKey: "Plexus", id: "plexus" },
-      { name: "Placeholder", sceneKeyu: "Placeholder", id: "placeholder" },
+      { name: "Placeholder", sceneKey: "Placeholder", id: "placeholder" },
     ];
 
     bosses.forEach((boss, index) => {
