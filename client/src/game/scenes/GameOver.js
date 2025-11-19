@@ -46,6 +46,53 @@ export class GameOver extends Scene {
       .setOrigin(0.5);
     //timer ends here ^
 
+    const centerX = this.scale.width / 2;
+    const buttonY = 620;
+
+    // Restart the Boss Button
+    const restart = this.add
+      .text(centerX - 200, buttonY, "Restart Boss", {
+        fontFamily: "Arial",
+        fontSize: 40,
+        color: "#dddddd",
+      })
+      .setOrigin(0.5)
+      .setInteractive();
+
+    // change color on hover
+    restart.on("pointerover", () => restart.setColor("#ffffff"));
+    restart.on("pointerout", () => restart.setColor("#dddddd"));
+
+    restart.on("pointerup", () => {
+      // Close GameOver scene
+      this.scene.stop();
+
+      // Restart the boss scene
+      this.scene.start(bossKey);
+    });
+
+    // Return to the Boss Selection Screen
+    const bossSelection = this.add
+      .text(centerX + 200, buttonY, "Return to Boss Select", {
+        fontFamily: "Arial",
+        fontSize: 32,
+        color: "#dddddd",
+      })
+      .setOrigin(0.5)
+      .setInteractive();
+
+    // change color on hover
+    bossSelection.on("pointerover", () => bossSelection.setColor("#ffffff"));
+    bossSelection.on("pointerout", () => bossSelection.setColor("#dddddd"));
+
+    bossSelection.on("pointerup", () => {
+      // close GameOver scene
+      this.scene.stop();
+
+      // Go back to the boss select
+      this.scene.start("BossSelect");
+    });
+
     EventBus.emit("current-scene-ready", this);
   }
 
