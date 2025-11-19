@@ -378,12 +378,6 @@ body,
   transition: all 150ms ease;
 }
 
-.boss-score-card:hover {
-  border-color: rgba(209, 155, 255, 0.4);
-  box-shadow: 0 0 10px rgba(209, 155, 255, 0.2);
-  transform: translateY(-2px);
-}
-
 .boss-name {
   color: #d19bff;
   font-family: "Orbitron", sans-serif;
@@ -412,11 +406,6 @@ body,
   color: var(--fg, #eaeaea);
   font-size: 14px;
   transition: all 120ms ease;
-}
-
-.score-item:hover {
-  background: rgba(209, 155, 255, 0.05);
-  border-color: rgba(209, 155, 255, 0.2);
 }
 
 .score-value {
