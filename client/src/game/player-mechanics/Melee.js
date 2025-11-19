@@ -1,6 +1,6 @@
 export function setupMelee(player, scene) {
   // Config for melee feature
-  player.attackRange = 40;
+  player.attackRange = 60;
   player.attackWidth = 30;
   player.attackHeight = 30;
   player.attackDuration = 200;
@@ -20,7 +20,20 @@ export function setupMelee(player, scene) {
       player.canAttack &&
       !player.isAttacking
     ) {
-      console.log("Melee attack", player.aimDirection);
+      // checks if boss is in melee range
+      const boss = scene.boss;
+      if (boss && boss.damageHandler) {
+        const dist = Phaser.Math.Distance.Between(
+          player.x,
+          player.y,
+          boss.x,
+          boss.y
+        );
+        // does damage
+        if (dist <= player.attackRange) {
+          boss.damageHandler.take(player.attackDamage);
+        }
+      }
 
       // Prevents multiple attacks from holding button
       player.isAttacking = true;
