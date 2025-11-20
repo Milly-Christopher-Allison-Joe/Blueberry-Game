@@ -39,7 +39,7 @@ export class SoakCircle {
     if (!playerStillInside) {
       //fail condition if player is not inside
       console.warn("Player failed to soak!");
-      this.scene.scene.start("GameOver"); // placeholder death logic
+      this.scene.changeScene(); // placeholder death logic
       return;
     }
     // damage logic on successful soak

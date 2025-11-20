@@ -22,8 +22,9 @@ export class MainMenu extends Scene {
     // Title text
     this.add
       .text(width / 2, height / 2 - 100, "Blueberry Game", {
-        fontFamily: "Arial",
-        fontSize: "48px",
+        fontFamily: '"Pixelify Sans", sans-serif',
+        fontWeight: 1500,
+        fontSize: "60px",
         color: "#ffffff",
       })
       .setOrigin(0.5);
@@ -31,8 +32,8 @@ export class MainMenu extends Scene {
     // Start prompt
     this.add
       .text(width / 2, height / 2 + 20, "Press SPACE to Begin", {
-        fontFamily: "Arial",
-        fontSize: "24px",
+        fontFamily: '"Orbitron", sans-serif',
+        fontSize: "20px",
         color: "#bbbbbb",
       })
       .setOrigin(0.5);

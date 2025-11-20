@@ -21,15 +21,16 @@ export class BossSelect extends Phaser.Scene {
     // simple title menu text
     this.add
       .text(width / 2, 100, "Choose a Boss", {
-        font: "48px Arial",
-        fill: "#ffffff",
+        fontFamily: '"Orbitron", sans-serif',
+        fontSize: "35px",
+        color: "#bbbbbb",
       })
       .setOrigin(0.5);
 
     // list of bosses, can be expanded
     const bosses = [
       { name: "Plexus Sentinel", sceneKey: "Plexus", id: "plexus" },
-      { name: "Placeholder", sceneKeyu: "Placeholder", id: "placeholder" },
+      { name: "Placeholder", sceneKey: "Placeholder", id: "placeholder" },
     ];
 
     bosses.forEach((boss, index) => {
