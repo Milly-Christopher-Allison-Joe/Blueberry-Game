@@ -24,6 +24,7 @@ export class SoakCircle {
       .setOrigin(0.5, 0.5);
     scene.physics.add.existing(this.zone);
     this.zone.body.setAllowGravity(false);
+    this.zone.body.setCircle(this.radius);
     this.zone.body.moves = false;
 
     // Time for duration before the soak ends
