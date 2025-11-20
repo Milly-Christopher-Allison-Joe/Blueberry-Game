@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import { Player } from "../objects/Player";
 import { PlexusBoss } from "../objects/PlexusBoss";
 import { KillLine } from "../objects/Plexus Mechanics/KillLine";
+import { BossHealthBar } from "../UI/BossHealth";
 import { GameTimer } from "../UI/GameTimer";
 
 export class Plexus extends Scene {
@@ -141,6 +142,9 @@ export class Plexus extends Scene {
     this.physics.add.collider(this.player, this.boss);
 
     EventBus.emit("current-scene-ready", this);
+
+    // Creates health bar for boss (add this to every scene for future bosses)
+    this.bossHealthBar = new BossHealthBar(this, this.boss);
   }
 
   // Managing Timers of Phases
@@ -425,6 +429,9 @@ export class Plexus extends Scene {
 
     // update the kill line laser wall position to boss
     if (this.killLine) this.killLine.update(this.boss);
+
+    // Updates boss health bar
+    if (this.bossHealthBar) this.bossHealthBar.update();
   }
 
   changeScene() {

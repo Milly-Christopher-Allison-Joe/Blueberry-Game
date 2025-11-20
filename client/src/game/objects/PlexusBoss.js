@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { DropCircle } from "./Plexus Mechanics/DropCircle";
 import { SoakCircle } from "./Plexus Mechanics/Soak";
 import { KillSweep } from "./Plexus Mechanics/KillSweep";
+import { BossDamage } from "./Plexus Mechanics/Damage";
 
 export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -19,6 +20,9 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     // visual placeholder (just a square)
     this.visual = scene.add.rectangle(x, y, 80, 80, 0xff66ff);
     this.visual.setDepth(30);
+
+    // Health/Damage handler
+    this.damageHandler = new BossDamage(this, 2000);
 
     this.scene = scene;
   }
@@ -86,6 +90,12 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
       duration: duration,
       ease: "Power2",
     });
+  }
+
+  // removes boss after 0 hp. can change this to a victory screen later
+  onDeath() {
+    if (this.visual) this.visual.destroy();
+    this.destroy();
   }
 
   destroy() {

@@ -48,10 +48,12 @@ export function setupRanged(player, scene) {
         player.aimDirection.y * player.projectileSpeed
       );
 
-      // Destroys projectile on boss contact
+      // Destroys projectile and registers damage on boss contact
       scene.physics.add.overlap(projectile, scene.boss, () => {
         projectile.destroy();
-        // Can add more boss logic here if needed
+        if (scene.boss && scene.boss.damageHandler) {
+          scene.boss.damageHandler.take(30);
+        }
       });
 
       // Destroys projectile on contact with anything out of bounds
