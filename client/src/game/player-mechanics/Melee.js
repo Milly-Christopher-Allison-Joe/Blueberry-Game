@@ -1,6 +1,6 @@
 export function setupMelee(player, scene) {
   // Config for melee feature
-  player.attackRange = 60;
+  player.attackRange = 100;
   player.attackWidth = 30;
   player.attackHeight = 30;
   player.attackDuration = 200;
