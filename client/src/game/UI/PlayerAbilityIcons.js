@@ -3,28 +3,30 @@ export class PlayerAbilityIcons {
     this.scene = scene;
     this.player = player;
 
-    // For size and position of cooldown icons
-    this.iconSize = 20;
-    this.spacing = 1;
-    this.yOffset = -40;
+    // For size of cooldown icons
+    this.iconSize = 45;
+    this.spacing = 3;
 
     // This defines the abilities and their icons
     this.abilities = [
       {
         key: "dash",
         emoji: "➔",
+        label: "dash",
         getCooldown: () => player.getDashCooldown(),
         getMaxCooldown: () => player.getDashMaxCooldown(),
       },
       {
         key: "heal",
         emoji: "✚",
+        label: "heal",
         getCooldown: () => player.getHealCooldown(),
         getMaxCooldown: () => player.getHealMaxCooldown(),
       },
       {
         key: "ranged",
         emoji: "❈",
+        label: "ranged",
         getCooldown: () => player.getRangedCooldown(),
         getMaxCooldown: () => player.getRangedMaxCooldown(),
       },
@@ -44,12 +46,24 @@ export class PlayerAbilityIcons {
         })
         .setOrigin(0.5);
 
-      // This groups them in a container
-      const container = scene.add.container(
-        player.x + x,
-        player.y + this.yOffset,
-        [emojiText]
-      );
+      // Label text centered below icons
+      const labelText = scene.add
+        .text(0, this.iconSize / 2 + 8, ability.label, {
+          font: "12px Arial",
+          color: "#fff",
+          align: "center",
+        })
+        .setOrigin(0.5, 0);
+
+      // Icons are at bottom left of the screen
+      const cam = scene.cameras.main;
+      const fixedX = cam.width / 2 + x;
+      const fixedY = cam.height - 115;
+      const container = scene.add.container(fixedX, fixedY, [
+        emojiText,
+        labelText,
+      ]);
+      container.setScrollFactor(0);
       container.setDepth(10000);
 
       return { container, ability, x };
@@ -58,10 +72,7 @@ export class PlayerAbilityIcons {
 
   // This updates icon positions and fade effect for cooldowns
   update() {
-    this.icons.forEach(({ container, ability, x }) => {
-      container.x = this.player.x + x;
-      container.y = this.player.y + this.yOffset;
-
+    this.icons.forEach(({ container, ability }) => {
       const cooldown = ability.getCooldown();
       const maxCooldown = ability.getMaxCooldown();
 
