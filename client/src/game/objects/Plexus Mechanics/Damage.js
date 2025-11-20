@@ -1,22 +1,22 @@
 export class BossDamage {
-  constructor(boss, maxHealth = 100) {
+  constructor(boss, maxHealth = 2000) {
     this.boss = boss;
-    this.max = maxHealth;
-    this.hp = maxHealth;
+    this.maxHealth = maxHealth;
+    this.currentHealth = maxHealth;
     this.dead = false;
   }
 
   take(amount) {
     if (this.dead) return;
-    this.hp -= amount;
-    if (this.hp <= 0) {
-      this.hp = 0;
+    this.currentHealth -= amount;
+    if (this.currentHealth <= 0) {
+      this.currentHealth = 0;
       this.dead = true;
       if (this.boss?.onDeath) this.boss.onDeath();
     }
   }
 
   percent() {
-    return this.hp / this.max;
+    return this.currentHealth / this.maxHealth;
   }
 }

@@ -52,7 +52,7 @@ export function setupRanged(player, scene) {
       scene.physics.add.overlap(projectile, scene.boss, () => {
         projectile.destroy();
         if (scene.boss && scene.boss.damageHandler) {
-          scene.boss.damageHandler.take(20);
+          scene.boss.damageHandler.take(30);
         }
       });
 

@@ -2,7 +2,7 @@ export function setupHeal(player, scene) {
   // Config for heal feature
   player.canHeal = true;
   player.healCooldown = 15000; // 15 second cooldown
-  player.healAmount = 20;
+  player.healAmount = 50;
 
   // New Cooldown state for UI
   let cooldown = 0;

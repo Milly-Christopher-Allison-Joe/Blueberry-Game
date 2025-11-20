@@ -22,7 +22,7 @@ export class PlexusBoss extends Phaser.Physics.Arcade.Sprite {
     this.visual.setDepth(30);
 
     // Health/Damage handler
-    this.damageHandler = new BossDamage(this, 100);
+    this.damageHandler = new BossDamage(this, 2000);
 
     this.scene = scene;
   }
