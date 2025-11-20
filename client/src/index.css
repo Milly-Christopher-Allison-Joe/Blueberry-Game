@@ -69,7 +69,6 @@ body,
   z-index: 1000;
   height: 64px;
   background-color: #242424;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -80,7 +79,7 @@ body,
 .brand {
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
-  font-style: normal;
+  font-style: bold;
   font-weight: 700;
   font-size: 50px;
   text-decoration: none;
@@ -103,6 +102,10 @@ body,
   padding: 8px 10px;
   border-radius: 8px;
   transition: transform 120ms ease, background 120ms ease;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
 .nav-link:hover {
@@ -161,6 +164,10 @@ body,
   border-radius: 6px;
   transition: background 120ms ease;
   display: block;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
 .dropdown-link:hover {
@@ -206,6 +213,7 @@ body,
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
+  box-shadow: 0 0 15px #d19bff;
 
   background-image: url(assets/background.jpg);
 }
@@ -221,6 +229,7 @@ body,
   max-width: 960px;
   margin: 90px auto 40px;
   padding: 20px;
+  box-shadow: 0 0 15px #d19bff;
 }
 
 .login-page form,
@@ -308,4 +317,112 @@ body,
   max-width: 960px;
   margin: 90px auto 40px;
   padding: 20px;
+  box-shadow: 0 0 15px #d19bff;
+}
+
+/* profile page */
+.profile-page {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--fg, #eaeaea);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  max-width: 960px;
+  margin: 90px auto 40px;
+  padding: 20px;
+  box-shadow: 0 0 15px #d19bff;
+}
+
+.profile-page h1 {
+  color: #d19bff;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.profile-page p {
+  color: var(--fg, #eaeaea);
+  font-size: 18px;
+}
+
+/* high scores for different bosses section */
+.high-scores-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(209, 155, 255, 0.2);
+}
+
+.high-scores-section h2 {
+  color: #d19bff;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+}
+
+.boss-scores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.boss-score-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(209, 155, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 150ms ease;
+}
+
+.boss-name {
+  color: #d19bff;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(209, 155, 255, 0.15);
+}
+
+.score-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(209, 155, 255, 0.1);
+  border-radius: 8px;
+  color: var(--fg, #eaeaea);
+  font-size: 14px;
+  transition: all 120ms ease;
+}
+
+.score-value {
+  color: #d19bff;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.score-date {
+  color: rgba(234, 234, 234, 0.6);
+  font-size: 12px;
+}
+
+.empty-scores {
+  color: rgba(234, 234, 234, 0.5);
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
 }

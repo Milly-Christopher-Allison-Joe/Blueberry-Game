@@ -21,8 +21,9 @@ export class BossSelect extends Phaser.Scene {
     // simple title menu text
     this.add
       .text(width / 2, 100, "Choose a Boss", {
-        font: "48px Arial",
-        fill: "#ffffff",
+        fontFamily: '"Orbitron", sans-serif',
+        fontSize: "35px",
+        color: "#bbbbbb",
       })
       .setOrigin(0.5);
 
