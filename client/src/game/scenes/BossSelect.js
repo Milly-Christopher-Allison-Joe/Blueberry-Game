@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { bosses } from "../Boss Imports/BossConfigs";
+import { bosses } from "../Boss Imports/BossLists";
 
 export class BossSelect extends Phaser.Scene {
   constructor() {

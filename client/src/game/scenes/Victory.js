@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
-import { getBossNameFromSceneKey } from "../Boss Imports/BossConfigs";
+import { getBossNameFromSceneKey } from "../Boss Imports/BossLists";
 
 export class Victory extends Scene {
   constructor() {

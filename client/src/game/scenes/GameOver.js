@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { getBossNameFromSceneKey } from "../Boss Imports/BossConfigs";
+import { getBossNameFromSceneKey } from "../Boss Imports/BossLists";
 
 export class GameOver extends Scene {
   constructor() {
