@@ -37,9 +37,6 @@ export class BossScene extends Scene {
       this.timer.saveToRegistry();
     }
 
-    // Save which boss was defeated
-    this.registry.set("defeatedBoss", this.boss?.constructor?.name);
-
     // Determine which scene to load
     const target = result === "victory" ? "Victory" : "GameOver";
 

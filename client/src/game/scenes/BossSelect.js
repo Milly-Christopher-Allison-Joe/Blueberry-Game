@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { bosses } from "../Boss Imports/BossConfigs";
 
 export class BossSelect extends Phaser.Scene {
   constructor() {
@@ -26,12 +27,6 @@ export class BossSelect extends Phaser.Scene {
         color: "#bbbbbb",
       })
       .setOrigin(0.5);
-
-    // list of bosses, can be expanded
-    const bosses = [
-      { name: "Plexus Sentinel", sceneKey: "Plexus", id: "plexus" },
-      { name: "Placeholder", sceneKey: "Placeholder", id: "placeholder" },
-    ];
 
     bosses.forEach((boss, index) => {
       const y = 200 + index * 80;

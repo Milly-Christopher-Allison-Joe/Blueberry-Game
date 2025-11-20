@@ -5,7 +5,7 @@ import { PlexusBoss } from "../objects/PlexusBoss";
 import { KillLine } from "../objects/Plexus Mechanics/KillLine";
 import { BossHealthBar } from "../UI/BossHealth";
 import { GameTimer } from "../UI/GameTimer";
-import { BossScene } from "./BossScene";
+import { BossScene } from "../Boss Imports/BossScene";
 
 export class Plexus extends BossScene {
   constructor() {
@@ -125,12 +125,18 @@ export class Plexus extends BossScene {
       this.startNextPhase();
     });
 
-    // DEBUG: Press L to jump to Phase 3
+    // DEBUG: Press L to jump to Phase 4
     this.input.keyboard.on("keydown-L", () => {
       console.warn("DEBUG: Skipping to Phase 4");
       this.currentPhase = 4;
       this.phaseActive = false;
       this.startNextPhase();
+    });
+
+    // DEBUG: Press V to instantly trigger Victory
+    this.input.keyboard.on("keydown-V", () => {
+      console.warn("DEBUG: Triggering Victory Screen");
+      this.changeScene("victory");
     });
 
     // Collision between Hallway and Player
