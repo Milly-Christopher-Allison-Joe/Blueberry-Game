@@ -21,6 +21,6 @@ export class Damage {
     this.player.setActive(false);
     this.player.setVisible(false);
     // Triggers GameOver
-    this.player.scene.scene.start("GameOver");
+    this.player.scene.changeScene();
   }
 }

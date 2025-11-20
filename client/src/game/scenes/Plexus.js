@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import { Player } from "../objects/Player";
 import { PlexusBoss } from "../objects/PlexusBoss";
 import { KillLine } from "../objects/Plexus Mechanics/KillLine";
+import { GameTimer } from "../UI/GameTimer";
 
 export class Plexus extends Scene {
   constructor() {
@@ -81,6 +82,21 @@ export class Plexus extends Scene {
     const bossY = this.player.y;
 
     this.boss = new PlexusBoss(this, bossX, bossY);
+
+    // TIMER :)
+    this.timer = new GameTimer(this);
+    this.timer.start();
+
+    // the ESC key to pause
+    this.escapeKey = this.input.keyboard.addKey("ESC");
+
+    this.escapeKey.on("down", () => {
+      // Pause our scene
+      this.scene.pause();
+
+      // launch the PauseMenu overlay to the scene
+      this.scene.launch("PauseMenu", { currentScene: "Plexus" });
+    });
 
     // Initial Phase Logic
     this.currentPhase = 1;
@@ -412,6 +428,11 @@ export class Plexus extends Scene {
   }
 
   changeScene() {
+    // tells the timer to stop when we get a game over or change scene
+    if (this.timer) {
+      this.timer.stop();
+      this.timer.saveToRegistry();
+    }
     this.scene.start("GameOver");
   }
 }
