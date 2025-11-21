@@ -31,7 +31,9 @@ export class MainMenu extends Scene {
 
     // Button for starting the game
     this.add
-      .sprite(width / 2, height / 2 + 130, "startButton")
+      .sprite(width / 2, height / 2 + 130, "startButton", {
+        boxShadow: "15px 15px 15px #d19bff",
+      })
       .setOrigin(0.5)
       .setScale(0.4);
 
