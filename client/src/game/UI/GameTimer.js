@@ -32,8 +32,8 @@ export class GameTimer {
     this.text = null;
 
     this.text = scene.add.text(110, 75, "00:00.0", {
-      fontSize: "30px",
-      fontFamily: "Arial",
+      fontSize: "32px",
+      fontFamily: "Pixelify Sans",
       color: "#ffffff",
     });
     this.text.setScrollFactor(0); // locks it to the screen

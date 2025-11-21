@@ -22,7 +22,7 @@ export class MainMenu extends Scene {
     // Title text
     this.add
       .text(width / 2, height / 2 - 100, "Blueberry Game", {
-        fontFamily: '"Pixelify Sans", sans-serif',
+        fontFamily: "Pixelify Sans",
         fontWeight: 1500,
         fontSize: "60px",
         color: "#ffffff",

@@ -16,7 +16,7 @@ export function setupMelee(player, scene) {
         start: 0,
         end: 1,
       }),
-      frameRate: 8,
+      frameRate: 7,
       repeat: 0,
     });
   }

@@ -3,7 +3,9 @@ import background from "../../assets/background.jpg";
 import dash from "../../assets/Ability Icons/dash.png";
 import heal from "../../assets/Ability Icons/heal.png";
 import ranged from "../../assets/Ability Icons/ranged.png";
+import bordericon from "../../assets/Ability Icons/Border1.png";
 import slash from "../../assets/Player Attacks/slash.png";
+import rangedattack from "../../assets/Player Attacks/rangedattack.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -48,10 +50,19 @@ export class Preloader extends Scene {
     // Ranged icon
     this.load.image("ranged", ranged);
 
+    // Icon border
+    this.load.image("bordericon", bordericon);
+
     // Player Slash Animation
     this.load.spritesheet("melee", slash, {
       frameWidth: 30,
       frameHeight: 76,
+    });
+
+    // Player ranged attack projectile
+    this.load.spritesheet("rangedattack", rangedattack, {
+      frameWidth: 32,
+      frameHeight: 32,
     });
   }
 
