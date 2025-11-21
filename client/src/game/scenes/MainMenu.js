@@ -21,20 +21,26 @@ export class MainMenu extends Scene {
 
     // Title text
     this.add
-      .text(width / 2, height / 2 - 100, "Blueberry Game", {
+      .text(width / 2, height / 2 - 70, "Blueberry Game", {
         fontFamily: '"Pixelify Sans", sans-serif',
         fontWeight: 1500,
-        fontSize: "60px",
+        fontSize: "90px",
         color: "#ffffff",
       })
       .setOrigin(0.5);
 
+    // Button for starting the game
+    this.add
+      .sprite(width / 2, height / 2 + 130, "startButton")
+      .setOrigin(0.5)
+      .setScale(0.4);
+
     // Start prompt
     this.add
-      .text(width / 2, height / 2 + 20, "Press SPACE to Begin", {
+      .text(width / 2, height / 2 + 125, "Press SPACE to Begin", {
         fontFamily: '"Orbitron", sans-serif',
         fontSize: "20px",
-        color: "#bbbbbb",
+        color: "#ffffffff",
       })
       .setOrigin(0.5);
 

@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import background from "../../assets/background.jpg";
+import buttonSprite from "../../assets/button-sprite/buttonSprite.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -34,6 +35,9 @@ export class Preloader extends Scene {
 
     // simple background asset
     this.load.image("background", background);
+
+    // load start button asset
+    this.load.image("startButton", buttonSprite);
   }
 
   create() {
