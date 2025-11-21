@@ -10,6 +10,19 @@ export class BossScene extends Scene {
     this.phaseTimers = [];
   }
 
+  create() {
+    // the ESC key to pause
+    this.escapeKey = this.input.keyboard.addKey("ESC");
+
+    this.escapeKey.on("down", () => {
+      // Pause our scene
+      this.scene.pause();
+
+      // launch the PauseMenu overlay to the scene
+      this.scene.launch("PauseMenu", { currentScene: "Plexus" });
+    });
+  }
+
   // Managing Timers of Phases
   schedulePhaseEvent(delay, callback) {
     const t = this.time.delayedCall(delay, callback);
