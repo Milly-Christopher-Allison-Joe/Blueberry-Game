@@ -1,5 +1,9 @@
 import { Scene } from "phaser";
 import background from "../../assets/background.jpg";
+import dash from "../../assets/Ability Icons/dash.png";
+import heal from "../../assets/Ability Icons/heal.png";
+import ranged from "../../assets/Ability Icons/ranged.png";
+import slash from "../../assets/Player Attacks/slash.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -34,6 +38,21 @@ export class Preloader extends Scene {
 
     // simple background asset
     this.load.image("background", background);
+
+    // Dash Icon
+    this.load.image("dash", dash);
+
+    // Heal Icon
+    this.load.image("heal", heal);
+
+    // Ranged icon
+    this.load.image("ranged", ranged);
+
+    // Player Slash Animation
+    this.load.spritesheet("melee", slash, {
+      frameWidth: 30,
+      frameHeight: 76,
+    });
   }
 
   create() {

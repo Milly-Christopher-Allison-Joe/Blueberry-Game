@@ -6,6 +6,7 @@ import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { BossSelect } from "./scenes/BossSelect";
 import { PauseMenu } from "./UI/PauseMenu";
+import { Victory } from "./scenes/Victory";
 
 const config = {
   type: Phaser.AUTO,
@@ -13,7 +14,16 @@ const config = {
   height: 768,
   parent: "game-container",
   backgroundColor: "#028af8",
-  scene: [Boot, Preloader, MainMenu, BossSelect, Plexus, PauseMenu, GameOver],
+  scene: [
+    Boot,
+    Preloader,
+    MainMenu,
+    BossSelect,
+    Plexus,
+    PauseMenu,
+    GameOver,
+    Victory,
+  ],
   physics: {
     default: "arcade",
     arcade: {

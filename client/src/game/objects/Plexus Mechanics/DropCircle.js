@@ -50,6 +50,7 @@ export class DropCircle {
       .zone(pool.x, pool.y, this.poolRadius * 2, this.poolRadius * 2)
       .setOrigin(0.5, 0.5);
     this.scene.physics.add.existing(this.zone);
+    this.zone.body.setCircle(this.poolRadius);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
 

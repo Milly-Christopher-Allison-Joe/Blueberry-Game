@@ -12,7 +12,9 @@ export class BossDamage {
     if (this.currentHealth <= 0) {
       this.currentHealth = 0;
       this.dead = true;
-      if (this.boss?.onDeath) this.boss.onDeath();
+      if (this.boss?.onDeath) {
+        this.boss.onDeath();
+      }
     }
   }
 

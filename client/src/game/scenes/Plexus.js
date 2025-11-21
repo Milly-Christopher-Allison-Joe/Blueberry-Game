@@ -5,8 +5,9 @@ import { PlexusBoss } from "../objects/PlexusBoss";
 import { KillLine } from "../objects/Plexus Mechanics/KillLine";
 import { BossHealthBar } from "../UI/BossHealth";
 import { GameTimer } from "../UI/GameTimer";
+import { BossScene } from "../Boss Imports/BossScene";
 
-export class Plexus extends Scene {
+export class Plexus extends BossScene {
   constructor() {
     super("Plexus");
   }
@@ -102,7 +103,6 @@ export class Plexus extends Scene {
     // Initial Phase Logic
     this.currentPhase = 1;
     this.phaseActive = false;
-    this.phaseTimers = [];
 
     this.startNextPhase();
 
@@ -125,12 +125,18 @@ export class Plexus extends Scene {
       this.startNextPhase();
     });
 
-    // DEBUG: Press L to jump to Phase 3
+    // DEBUG: Press L to jump to Phase 4
     this.input.keyboard.on("keydown-L", () => {
       console.warn("DEBUG: Skipping to Phase 4");
       this.currentPhase = 4;
       this.phaseActive = false;
       this.startNextPhase();
+    });
+
+    // DEBUG: Press V to instantly trigger Victory
+    this.input.keyboard.on("keydown-V", () => {
+      console.warn("DEBUG: Triggering Victory Screen");
+      this.changeScene("victory");
     });
 
     // Collision between Hallway and Player
@@ -145,26 +151,6 @@ export class Plexus extends Scene {
 
     // Creates health bar for boss (add this to every scene for future bosses)
     this.bossHealthBar = new BossHealthBar(this, this.boss);
-  }
-
-  // Managing Timers of Phases
-  schedulePhaseEvent(delay, callback) {
-    const t = this.time.delayedCall(delay, callback);
-    this.phaseTimers.push(t);
-    return t;
-  }
-
-  schedulePhaseRepeatingEvent(config) {
-    const evt = this.time.addEvent(config);
-    this.phaseTimers.push(evt);
-    return evt;
-  }
-
-  clearPhaseTimers() {
-    for (const t of this.phaseTimers) {
-      t.remove(false);
-    }
-    this.phaseTimers = [];
   }
 
   // Setting up the order of phases and the starting of them
@@ -432,14 +418,5 @@ export class Plexus extends Scene {
 
     // Updates boss health bar
     if (this.bossHealthBar) this.bossHealthBar.update();
-  }
-
-  changeScene() {
-    // tells the timer to stop when we get a game over or change scene
-    if (this.timer) {
-      this.timer.stop();
-      this.timer.saveToRegistry();
-    }
-    this.scene.start("GameOver");
   }
 }
