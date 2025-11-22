@@ -30,16 +30,22 @@ export class MainMenu extends Scene {
       .setOrigin(0.5);
 
     // Button for starting the game
-    this.add
-      .sprite(width / 2, height / 2 + 130, "startButton", {
+    const mainButton = this.add
+      .sprite(width / 2, height / 2 + 130, "mainButton", {
         boxShadow: "15px 15px 15px #d19bff",
       })
       .setOrigin(0.5)
       .setScale(0.4);
 
+    //press down to start game
+    mainButton.setInteractive({ useHandCursor: true });
+    mainButton.on("pointerdown", () => {
+      this.scene.start("BossSelect");
+    });
+
     // Start prompt
     this.add
-      .text(width / 2, height / 2 + 125, "Press SPACE to Begin", {
+      .text(width / 2, height / 2 + 125, "Start Game", {
         fontFamily: '"Orbitron", sans-serif',
         fontSize: "20px",
         color: "#ffffffff",
