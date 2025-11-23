@@ -42,7 +42,7 @@ export class Preloader extends Scene {
     this.load.image("mainButton", mainButton);
 
     // load start button asset
-    this.load.image("startButton", buttonSprite);
+    this.load.image("buttonSprite", buttonSprite);
   }
 
   create() {

@@ -37,17 +37,33 @@ export class MainMenu extends Scene {
       .setOrigin(0.5)
       .setScale(0.4);
 
+    const originalY = mainButton.y;
+    const originalScale = mainButton.scaleX;
+
     //press down to start game
     mainButton.setInteractive({ useHandCursor: true });
+
+    // Press down effect
     mainButton.on("pointerdown", () => {
+      // Scale & move down slightly for press effect-- same as boss selecct.
+      mainButton.setScale(originalScale * 0.9);
+      mainButton.setY(originalY + 5);
+    });
+    mainButton.on("pointerup", () => {
+      mainButton.setScale(originalScale);
+      mainButton.setY(originalY);
       this.scene.start("BossSelect");
+    });
+    mainButton.on("pointerout", () => {
+      mainButton.setScale(originalScale);
+      mainButton.setY(originalY);
     });
 
     // Start prompt
     this.add
       .text(width / 2, height / 2 + 125, "Start Game", {
         fontFamily: '"Orbitron", sans-serif',
-        fontSize: "20px",
+        fontSize: "25px",
         color: "#ffffffff",
       })
       .setOrigin(0.5);
