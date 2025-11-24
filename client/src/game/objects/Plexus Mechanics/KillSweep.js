@@ -14,18 +14,68 @@ export class KillSweep {
 
     const sweepY = boss.y;
 
+    // Sprite animations for the segements of the Kill Sweep
+    this.scene.anims.create({
+      key: "Beam",
+      frames: this.scene.anims.generateFrameNumbers("KSbeam"),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.scene.anims.create({
+      key: "Start",
+      frames: this.scene.anims.generateFrameNumbers("KSstart"),
+      frameRate: 10,
+      repeat: -1,
+    });
+
     // Start X based on direction
     let startX = direction === "left-to-right" ? boss.x - 1500 : boss.x + 300;
 
-    this.line = scene.add.rectangle(
-      startX,
-      sweepY,
-      thickness,
-      500,
-      0xff3300,
-      0.4
-    );
-    this.line.setDepth(60);
+    // Container for the entire Beam sprite
+    this.container = scene.add.container(startX, sweepY);
+    this.container.setDepth(60);
+
+    const beamHeight = 500;
+    let usedHeight = 0;
+
+    // SCALE FACTOR
+    const scale = 3;
+
+    // TRUE sprite heights after rotation + scale
+    const topHeight = 14 * scale;
+    const beamSegHeight = 10 * scale;
+
+    // start of the beam
+    const topSprite = scene.add
+      .sprite(0, -beamHeight / 2, "KSstart")
+      .setOrigin(0.5, 0);
+    topSprite.x = -6;
+    topSprite.rotation = -Math.PI / 2;
+    this.scene.time.delayedCall(1, () => {
+      topSprite.play("Start");
+    });
+    topSprite.setScale(scale);
+    this.container.add(topSprite);
+    usedHeight += topHeight;
+
+    // all of the segments
+    while (usedHeight < beamHeight) {
+      const segmentY = -beamHeight / 2 + usedHeight;
+
+      const beamSegment = scene.add
+        .sprite(0, segmentY, "KSbeam")
+        .setOrigin(0.5, 0);
+      beamSegment.rotation = -Math.PI / 2;
+      this.scene.time.delayedCall(1, () => {
+        beamSegment.play("Beam");
+      });
+      beamSegment.setCrop(0, 1, 16, 8);
+      beamSegment.setScale(scale);
+      this.container.add(beamSegment);
+
+      usedHeight += beamSegHeight;
+    }
 
     // Physics zone
     this.zone = scene.add.zone(startX, sweepY, thickness, 500);
@@ -33,8 +83,8 @@ export class KillSweep {
     this.zone.body.setAllowGravity(false);
 
     // Enable physics body for the line
-    this.scene.physics.world.enable(this.line);
-    this.line.body.setAllowGravity(false);
+    this.scene.physics.world.enable(this.container);
+    this.container.body.setAllowGravity(false);
 
     // Kill the player on contact
     this.collider = scene.physics.add.overlap(scene.player, this.zone, () => {
@@ -45,7 +95,7 @@ export class KillSweep {
 
     // Moving the kill line
     const velocity = direction === "left-to-right" ? speed : -speed;
-    this.line.body.setVelocityX(velocity);
+    this.container.body.setVelocityX(velocity);
     this.zone.body.setVelocityX(velocity);
 
     // Cleanup once off-screen
@@ -53,7 +103,7 @@ export class KillSweep {
       delay: 100,
       loop: true,
       callback: () => {
-        if (this.line.x < -200 || this.line.x > worldWidth + 200) {
+        if (this.container.x < -200 || this.container.x > worldWidth + 200) {
           this.destroy();
         }
       },
@@ -62,17 +112,17 @@ export class KillSweep {
 
   update() {
     // keep zone aligned with visual line
-    this.zone.x = this.line.x;
-    this.zone.y = this.line.y;
+    this.zone.x = this.container.x;
+    this.zone.y = this.container.y;
 
-    this.zone.body.x = this.line.body.x;
-    this.zone.body.y = this.line.body.y;
+    this.zone.body.x = this.container.body.x;
+    this.zone.body.y = this.container.body.y;
   }
 
   destroy() {
     if (this.checkInterval) this.checkInterval.remove();
     if (this.collider) this.collider.destroy();
-    this.line.destroy();
+    this.container.destroy();
     this.zone.destroy();
   }
 }

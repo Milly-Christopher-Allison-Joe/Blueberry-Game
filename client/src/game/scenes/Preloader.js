@@ -6,6 +6,8 @@ import ranged from "../../assets/Ability Icons/ranged.png";
 import bordericon from "../../assets/Ability Icons/Border1.png";
 import slash from "../../assets/Player Attacks/slash.png";
 import rangedattack from "../../assets/Player Attacks/rangedattack.png";
+import KSbeam from "../../assets/boss attacks/KSbeam.png";
+import KSstart from "../../assets/boss attacks/KSstart.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -63,6 +65,17 @@ export class Preloader extends Scene {
     this.load.spritesheet("rangedattack", rangedattack, {
       frameWidth: 32,
       frameHeight: 32,
+    });
+
+    // Boss Kill Sweep Attack
+    this.load.spritesheet("KSbeam", KSbeam, {
+      frameWidth: 16,
+      frameHeight: 10,
+    });
+
+    this.load.spritesheet("KSstart", KSstart, {
+      frameWidth: 16,
+      frameHeight: 14,
     });
   }
 

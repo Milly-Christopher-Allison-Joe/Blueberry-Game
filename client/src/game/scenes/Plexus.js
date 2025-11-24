@@ -13,6 +13,8 @@ export class Plexus extends BossScene {
   }
 
   create() {
+    super.create();
+
     const worldWidth = 4000;
     const worldHeight = 800;
     const hallwayY = worldHeight / 2;
@@ -88,17 +90,6 @@ export class Plexus extends BossScene {
     // TIMER :)
     this.timer = new GameTimer(this);
     this.timer.start();
-
-    // the ESC key to pause
-    this.escapeKey = this.input.keyboard.addKey("ESC");
-
-    this.escapeKey.on("down", () => {
-      // Pause our scene
-      this.scene.pause();
-
-      // launch the PauseMenu overlay to the scene
-      this.scene.launch("PauseMenu", { currentScene: "Plexus" });
-    });
 
     // Initial Phase Logic
     this.currentPhase = 1;
