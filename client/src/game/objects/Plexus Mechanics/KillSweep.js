@@ -63,6 +63,24 @@ export class KillSweep {
     while (usedHeight < beamHeight) {
       const segmentY = -beamHeight / 2 + usedHeight;
 
+      const remaining = beamHeight - usedHeight;
+
+      // making the final segment a flipped start segement
+      if (remaining <= beamSegHeight) {
+        const bottomCap = scene.add
+          .sprite(0, segmentY, "KSstart")
+          .setOrigin(0.5, 1);
+        bottomCap.x = -6;
+        bottomCap.rotation = Math.PI / 2;
+        bottomCap.setScale(scale);
+        this.scene.time.delayedCall(1, () => {
+          bottomCap.play("Start");
+        });
+        this.container.add(bottomCap);
+        break;
+      }
+
+      // filling the space between the start and end with the center segements
       const beamSegment = scene.add
         .sprite(0, segmentY, "KSbeam")
         .setOrigin(0.5, 0);

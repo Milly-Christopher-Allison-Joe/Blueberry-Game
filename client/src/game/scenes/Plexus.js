@@ -37,14 +37,39 @@ export class Plexus extends BossScene {
       .setOrigin(0, 0)
       .setScrollFactor(0.2);
 
-    // Hallway floor
-    this.hallway = this.add.rectangle(
-      worldWidth / 2,
-      hallwayY,
-      worldWidth,
-      hallwayHeight,
-      0x222222
-    );
+    // Tiling for the playable area
+    const tileSize = 32;
+
+    this.hallTopBorder = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY - hallwayHeight / 2,
+        worldWidth,
+        tileSize,
+        "hallBorder"
+      )
+      .setOrigin(0.5, 0);
+
+    this.hallFill = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY - hallwayHeight / 2 + tileSize,
+        worldWidth,
+        hallwayHeight - tileSize * 2,
+        "hallFill"
+      )
+      .setOrigin(0.5, 0);
+
+    this.hallBottomBorder = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY + hallwayHeight / 2,
+        worldWidth,
+        tileSize,
+        "hallBorder"
+      )
+      .setOrigin(0.5, 0);
+    this.hallBottomBorder.angle = 180;
 
     // Boundary walls
     this.topWall = this.add.rectangle(
@@ -74,9 +99,6 @@ export class Plexus extends BossScene {
     this.bottomWall.body.setImmovable(true);
     this.bottomWall.body.setAllowGravity(false);
     this.bottomWall.body.setSize(worldWidth, 20);
-
-    // Hallway physics
-    this.physics.add.existing(this.hallway, true);
 
     // Create player instance
     this.player = new Player(this, 200, worldHeight / 2);
@@ -133,7 +155,7 @@ export class Plexus extends BossScene {
 
     //DEBUG: Press N to trigger soakCircle
     this.input.keyboard.on("keydown-N", () => {
-      this.boss.startSoakMechanic(this.player);
+      this.boss.startKillSweep(this.player);
     });
 
     // Collision between Hallway and Player

@@ -11,6 +11,8 @@ import KSstart from "../../assets/boss attacks/KSstart.png";
 import KLbeam from "../../assets/boss attacks/KLbeam.png";
 import dropRing from "../../assets/boss attacks/dropRing.png";
 import soakRing from "../../assets/boss attacks/soakRing.png";
+import TileBorder from "../../assets/scene textures/IndustrialTile_05.png";
+import TileSet from "../../assets/scene textures/IndustrialTile_14.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -45,6 +47,10 @@ export class Preloader extends Scene {
 
     // simple background asset
     this.load.image("background", background);
+
+    //Plexus Hallway
+    this.load.image("hallBorder", TileBorder);
+    this.load.image("hallFill", TileSet);
 
     // Dash Icon
     this.load.image("dash", dash);
