@@ -6,6 +6,7 @@ import { KillLine } from "../objects/Plexus Mechanics/KillLine";
 import { BossHealthBar } from "../UI/BossHealth";
 import { GameTimer } from "../UI/GameTimer";
 import { BossScene } from "../Boss Imports/BossScene";
+import { SoakCircle } from "../objects/Plexus Mechanics/Soak";
 
 export class Plexus extends BossScene {
   constructor() {
@@ -128,6 +129,11 @@ export class Plexus extends BossScene {
     this.input.keyboard.on("keydown-V", () => {
       console.warn("DEBUG: Triggering Victory Screen");
       this.changeScene("victory");
+    });
+
+    //DEBUG: Press N to trigger soakCircle
+    this.input.keyboard.on("keydown-N", () => {
+      this.boss.startSoakMechanic(this.player);
     });
 
     // Collision between Hallway and Player

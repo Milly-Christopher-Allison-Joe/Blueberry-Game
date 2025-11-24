@@ -13,10 +13,28 @@ export class SoakCircle {
     const spawnX = boss.x - 150;
     const spawnY = boss.y;
 
+    // Animation for the soak ring
+    this.scene.anims.create({
+      key: "soakBorder",
+      frames: this.scene.anims.generateFrameNumbers("soakRing"),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    // Animated sprite border
+    this.soakAnim = scene.add.sprite(spawnX, spawnY, "soakRing");
+    this.soakAnim.play("soakBorder");
+
+    const scaleX = (radius * 2) / 64;
+    const scaleY = (radius * 2) / 51;
+    const uniformScale = Math.min(scaleX, scaleY);
+    this.soakAnim.setScale(uniformScale);
+    this.soakAnim.setDepth(19);
+
     //Visual circle for the soak zone
     this.circle = scene.add.circle(spawnX, spawnY, radius, 0x66ccff, 0.3);
     this.circle.setStrokeStyle(3, 0x99e6ff);
-    this.circle.setDepth(40);
+    this.circle.setDepth(41);
 
     //Invisible body for physics and overlap detection with player
     this.zone = scene.add
@@ -69,5 +87,6 @@ export class SoakCircle {
     //clean up
     this.circle.destroy();
     this.zone.destroy();
+    this.soakAnim.destroy();
   }
 }

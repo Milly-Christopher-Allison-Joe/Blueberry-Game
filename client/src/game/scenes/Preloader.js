@@ -9,6 +9,8 @@ import rangedattack from "../../assets/Player Attacks/rangedattack.png";
 import KSbeam from "../../assets/boss attacks/KSbeam.png";
 import KSstart from "../../assets/boss attacks/KSstart.png";
 import KLbeam from "../../assets/boss attacks/KLbeam.png";
+import dropRing from "../../assets/boss attacks/dropRing.png";
+import soakRing from "../../assets/boss attacks/soakRing.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -83,6 +85,18 @@ export class Preloader extends Scene {
     this.load.spritesheet("KLbeam", KLbeam, {
       frameWidth: 16,
       frameHeight: 10,
+    });
+
+    // Soak Ring
+    this.load.spritesheet("soakRing", soakRing, {
+      frameWidth: 64,
+      frameHeight: 51,
+    });
+
+    // Drop ring
+    this.load.spritesheet("dropRing", dropRing, {
+      frameWidth: 64,
+      frameHeight: 57,
     });
   }
 

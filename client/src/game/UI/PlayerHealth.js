@@ -43,6 +43,8 @@ export class PlayerHealth {
       this.barWidth,
       this.barHeight
     );
+
+    this.graphics.setDepth(1000000);
   }
 
   // This sets the health bar location
