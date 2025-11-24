@@ -15,13 +15,32 @@ export class PlayerHealth {
 
     // This creates the visual
     this.graphics.clear();
-    this.graphics.fillStyle(0x000000, 0); // this makes makes the backgroud of the health bar transparent
+
+    // background behind the bar
+    this.graphics.fillStyle(0x222222, 1);
+    this.graphics.fillRect(
+      -this.barWidth / 2,
+      -30,
+      this.barWidth,
+      this.barHeight
+    );
+
+    // hp bar itself
     this.graphics.fillStyle(0xff0000, 1); // makes the players health red
     this.graphics.fillRect(
       // Health bar is a rectangle, can change with sprite if we want
       -this.barWidth / 2,
       -30,
       this.barWidth * (current / max),
+      this.barHeight
+    );
+
+    // bar border
+    this.graphics.lineStyle(1, 0xffffff, 1);
+    this.graphics.strokeRect(
+      -this.barWidth / 2,
+      -30,
+      this.barWidth,
       this.barHeight
     );
   }
