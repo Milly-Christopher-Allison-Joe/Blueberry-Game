@@ -8,6 +8,7 @@ import slash from "../../assets/Player Attacks/slash.png";
 import rangedattack from "../../assets/Player Attacks/rangedattack.png";
 import KSbeam from "../../assets/boss attacks/KSbeam.png";
 import KSstart from "../../assets/boss attacks/KSstart.png";
+import KLbeam from "../../assets/boss attacks/KLbeam.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -76,6 +77,12 @@ export class Preloader extends Scene {
     this.load.spritesheet("KSstart", KSstart, {
       frameWidth: 16,
       frameHeight: 14,
+    });
+
+    // Boss Kill Line Beam
+    this.load.spritesheet("KLbeam", KLbeam, {
+      frameWidth: 16,
+      frameHeight: 10,
     });
   }
 

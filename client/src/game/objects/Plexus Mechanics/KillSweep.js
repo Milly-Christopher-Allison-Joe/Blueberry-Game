@@ -18,14 +18,14 @@ export class KillSweep {
     this.scene.anims.create({
       key: "Beam",
       frames: this.scene.anims.generateFrameNumbers("KSbeam"),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
 
     this.scene.anims.create({
       key: "Start",
       frames: this.scene.anims.generateFrameNumbers("KSstart"),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
 
