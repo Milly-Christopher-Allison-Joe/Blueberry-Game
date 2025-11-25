@@ -1,16 +1,32 @@
-# React + Vite
+## Blueberry Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Fun Top Down Shooter Game
 
-Currently, two official plugins are available:
+Inspired by [Pineapple Game](https://tacticalairhorse.itch.io/nerubar-palace), an browser game designed to help teach people the mechanics of WoW bosses in a safe and fun environment.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Gameplay Mechanics
 
-## React Compiler
+Blueberry Game is designed to be a quick to understand game to people already familiar with the basics of video games and especially World of Warcraft. The bosses are directly inspired by bosses from the lastest raids, with the first finished being Plexus Sentinel from Manaforge Omega.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+In the game the player will have access to four main ability to fight against the boss and their mechanics that require specific problem solving skills to overcome.
 
-## Expanding the ESLint configuration
+The player has access to a dash that gives them momentary frames of immunity from incoming damage, essential for specific mechanics. A heal that will reliably keep them alive through the whole boss so long as it is managed effenciently. A melee swing which will be the player's core way of dishing out damage. Lastly a ranged fireball that can be used to sneak in a quick burst of damage on a cooldown if the player is forced to move away from the boss.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Architecture
+
+Blueberry game is built on React for the front end website, Phaser for the game's engine and mechanics, and SQL for the back-end.
+
+The game's logic is handled solely in the front end within a container within React while the backend server is used to store data about a user should they choose to make an account. It's main purpose is to save your best completed time for each boss!
+
+### How to Play!
+
+- Use <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> to move.
+- <kbd>SPACE</kbd> to dash!
+- <kbd>Q</kbd> to heal!
+- <kbd>F</kbd> to fire your ranged attack!
+- And Left Click to swing your melee attack!
+
+- Make sure you keep an eye out for various boss attacks as well.
+  - Damage areas that will hurt you if you stand in them.
+  - Zones that must be stood in to remain safe.
+  - Mechanics that must use the dash to avoid or perish.
