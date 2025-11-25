@@ -1,9 +1,30 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useMemo, useContext, useState, useEffect } from "react";
+import * as jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState();
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
+
+  const user = useMemo(() => {
+    if (!token) return null;
+    try {
+      return jwt_decode.default(token);
+    } catch {
+      return null;
+    }
+  }, [token]);
+
+  // Saves token to local whenever it changes
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+    }
+  }, [token]);
 
   const register = async (credentials) => {
     const response = await fetch("/api/users/register", {
@@ -33,7 +54,7 @@ export function AuthProvider({ children }) {
 
   const logout = () => setToken(null);
 
-  const value = { token, register, login, logout };
+  const value = { token, user, register, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

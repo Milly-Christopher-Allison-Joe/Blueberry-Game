@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 export default function Register() {
-  // const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -20,13 +20,17 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      let data = null;
+      const text = await response.text();
+      if (text) {
+        data = JSON.parse(text);
+      }
 
       if (data?.token) {
         localStorage.setItem("token", data.token);

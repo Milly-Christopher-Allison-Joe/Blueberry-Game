@@ -20,19 +20,26 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch("/users/login", {
+      const response = await fetch("/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
+      let data = null;
+      const text = await response.text();
+      if (text) {
+        data = JSON.parse(text);
+      }
+
       if (!response.ok) {
-        alert("Invalid username or password.");
+        alert(data?.message || "Invalid username or password.");
         return;
       }
 
-      login(form.username);
-      // await login(form);
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+      }
 
       navigate("/profile");
     } catch (error) {

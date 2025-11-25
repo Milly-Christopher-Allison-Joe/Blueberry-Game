@@ -12,16 +12,9 @@ CREATE TABLE users (
 -- BOSS TABLE
 CREATE TABLE boss (
     id SERIAL PRIMARY KEY,
+    key TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     base_time INTERVAL
-);
-
--- JOIN TABLE
-CREATE TABLE users_boss (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    boss_id INT NOT NULL REFERENCES boss(id) ON DELETE CASCADE,
-    completion_time INTERVAL NOT NULL
 );
 
 -- Table to connect users, scores, and bosses

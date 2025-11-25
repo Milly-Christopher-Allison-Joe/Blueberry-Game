@@ -1,9 +1,12 @@
 import express from "express";
 const router = express.Router();
 
-import { createUser, getUserByUsernameAndPassword } from "#db/queries/users";
-import requireBody from "#middleware/requireBody";
-import { createToken } from "#utils/jwt";
+import {
+  createUser,
+  getUserByUsernameAndPassword,
+} from "../db/queries/users.js";
+import requireBody from "../middleware/requireBody.js";
+import { createToken } from "../utils/jwt.js";
 
 router.post(
   "/register",
