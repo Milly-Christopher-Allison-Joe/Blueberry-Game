@@ -5,28 +5,32 @@ export class PlayerAbilityIcons {
 
     // For size of cooldown icons
     this.iconSize = 50;
-    this.spacing = 9;
+    this.spacing = 15;
 
     // This defines the abilities and their icons
     this.abilities = [
       {
+        key: "heal",
+        image: "heal",
+        keyImage: "Qkey",
+        label: "heal",
+        getCooldown: () => player.getHealCooldown(),
+        getMaxCooldown: () => player.getHealMaxCooldown(),
+      },
+      {
         key: "dash",
         image: "dash",
+        keyImage: "SPACEkey",
+        keyOffsetX: 28,
         label: "dash",
         offsetY: -8,
         getCooldown: () => player.getDashCooldown(),
         getMaxCooldown: () => player.getDashMaxCooldown(),
       },
       {
-        key: "heal",
-        image: "heal",
-        label: "heal",
-        getCooldown: () => player.getHealCooldown(),
-        getMaxCooldown: () => player.getHealMaxCooldown(),
-      },
-      {
         key: "ranged",
         image: "ranged",
+        keyImage: "Fkey",
         label: "ranged",
         getCooldown: () => player.getRangedCooldown(),
         getMaxCooldown: () => player.getRangedMaxCooldown(),
@@ -50,6 +54,19 @@ export class PlayerAbilityIcons {
         .setDisplaySize(this.iconSize, this.iconSize)
         .setOrigin(0.5);
 
+      // Keyboard icons for each ability
+      let keyObject = null;
+
+      if (ability.keyImage) {
+        // Special-case dash key size
+        const isDash = ability.key === "dash";
+
+        keyObject = scene.add
+          .image(ability.keyOffsetX ?? 13, -35, ability.keyImage)
+          .setDisplaySize(isDash ? 55 : 25, 25) // ← wider only for dash
+          .setOrigin(1);
+      }
+
       // Label text centered below icons
       const labelText = scene.add
         .text(0, this.iconSize / 2 + 8, ability.label, {
@@ -66,6 +83,7 @@ export class PlayerAbilityIcons {
       const container = scene.add.container(fixedX, fixedY, [
         borderObject,
         iconObject,
+        keyObject,
         labelText,
       ]);
       container.setScrollFactor(0);
