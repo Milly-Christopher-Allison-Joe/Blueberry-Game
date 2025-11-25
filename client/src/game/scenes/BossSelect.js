@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { bosses } from "../Boss Imports/BossLists";
 
 export class BossSelect extends Phaser.Scene {
   constructor() {
@@ -28,12 +29,6 @@ export class BossSelect extends Phaser.Scene {
         color: "#ffffffff",
       })
       .setOrigin(0.5);
-
-    // list of bosses, can be expanded
-    const bosses = [
-      { name: "Plexus Sentinel", sceneKey: "Plexus", id: "plexus" },
-      { name: "Placeholder", sceneKey: "Placeholder", id: "placeholder" },
-    ];
 
     // full transperancy, i wanted the buttons to press down when clicked and I tried looking up best ways but the two boss select buttons were overlapping so it would press the wrong boss so I resorted to AI and even with that it took a while to get it to work but this is what finally worked.
 

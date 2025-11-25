@@ -179,5 +179,16 @@ export class PauseMenu extends Scene {
       // Go back to the boss select
       this.scene.start("BossSelect");
     });
+
+    // the ESC key to pause
+    this.escapeKey = this.input.keyboard.addKey("ESC");
+
+    this.escapeKey.on("down", () => {
+      // Closes the pause menu
+      this.scene.stop();
+
+      // resumes the boss fight
+      this.scene.resume(this.currentScene);
+    });
   }
 }

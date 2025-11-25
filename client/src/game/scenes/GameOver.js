@@ -1,5 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
+import { getBossNameFromSceneKey } from "../Boss Imports/BossLists";
 
 export class GameOver extends Scene {
   constructor() {
@@ -27,6 +28,7 @@ export class GameOver extends Scene {
     // This is all the timer
     const finalTime = this.registry.get("runTime");
     const bossKey = this.registry.get("runScene");
+    const bossName = getBossNameFromSceneKey(bossKey);
 
     const formatted = this.formatTime(finalTime);
 
@@ -39,7 +41,7 @@ export class GameOver extends Scene {
       .setOrigin(0.5);
 
     this.add
-      .text(512, 210, `Boss: ${bossKey}`, {
+      .text(512, 210, `Boss: ${bossName}`, {
         fontFamily: "Orbitron",
         fontSize: 24,
         color: "#bbbbbb",

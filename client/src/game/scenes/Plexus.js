@@ -5,13 +5,17 @@ import { PlexusBoss } from "../objects/PlexusBoss";
 import { KillLine } from "../objects/Plexus Mechanics/KillLine";
 import { BossHealthBar } from "../UI/BossHealth";
 import { GameTimer } from "../UI/GameTimer";
+import { BossScene } from "../Boss Imports/BossScene";
+import { SoakCircle } from "../objects/Plexus Mechanics/Soak";
 
-export class Plexus extends Scene {
+export class Plexus extends BossScene {
   constructor() {
     super("Plexus");
   }
 
   create() {
+    super.create();
+
     const worldWidth = 4000;
     const worldHeight = 800;
     const hallwayY = worldHeight / 2;
@@ -33,14 +37,39 @@ export class Plexus extends Scene {
       .setOrigin(0, 0)
       .setScrollFactor(0.2);
 
-    // Hallway floor
-    this.hallway = this.add.rectangle(
-      worldWidth / 2,
-      hallwayY,
-      worldWidth,
-      hallwayHeight,
-      0x222222
-    );
+    // Tiling for the playable area
+    const tileSize = 32;
+
+    this.hallTopBorder = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY - hallwayHeight / 2,
+        worldWidth,
+        tileSize,
+        "hallBorder"
+      )
+      .setOrigin(0.5, 0);
+
+    this.hallFill = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY - hallwayHeight / 2 + tileSize,
+        worldWidth,
+        hallwayHeight - tileSize * 2,
+        "hallFill"
+      )
+      .setOrigin(0.5, 0);
+
+    this.hallBottomBorder = this.add
+      .tileSprite(
+        worldWidth / 2,
+        hallwayY + hallwayHeight / 2,
+        worldWidth,
+        tileSize,
+        "hallBorder"
+      )
+      .setOrigin(0.5, 0);
+    this.hallBottomBorder.angle = 180;
 
     // Boundary walls
     this.topWall = this.add.rectangle(
@@ -71,9 +100,6 @@ export class Plexus extends Scene {
     this.bottomWall.body.setAllowGravity(false);
     this.bottomWall.body.setSize(worldWidth, 20);
 
-    // Hallway physics
-    this.physics.add.existing(this.hallway, true);
-
     // Create player instance
     this.player = new Player(this, 200, worldHeight / 2);
     this.player.setupCamera(1.2);
@@ -88,21 +114,9 @@ export class Plexus extends Scene {
     this.timer = new GameTimer(this);
     this.timer.start();
 
-    // the ESC key to pause
-    this.escapeKey = this.input.keyboard.addKey("ESC");
-
-    this.escapeKey.on("down", () => {
-      // Pause our scene
-      this.scene.pause();
-
-      // launch the PauseMenu overlay to the scene
-      this.scene.launch("PauseMenu", { currentScene: "Plexus" });
-    });
-
     // Initial Phase Logic
     this.currentPhase = 1;
     this.phaseActive = false;
-    this.phaseTimers = [];
 
     this.startNextPhase();
 
@@ -125,12 +139,23 @@ export class Plexus extends Scene {
       this.startNextPhase();
     });
 
-    // DEBUG: Press L to jump to Phase 3
+    // DEBUG: Press L to jump to Phase 4
     this.input.keyboard.on("keydown-L", () => {
       console.warn("DEBUG: Skipping to Phase 4");
       this.currentPhase = 4;
       this.phaseActive = false;
       this.startNextPhase();
+    });
+
+    // DEBUG: Press V to instantly trigger Victory
+    this.input.keyboard.on("keydown-V", () => {
+      console.warn("DEBUG: Triggering Victory Screen");
+      this.changeScene("victory");
+    });
+
+    //DEBUG: Press N to trigger soakCircle
+    this.input.keyboard.on("keydown-N", () => {
+      this.boss.startKillSweep(this.player);
     });
 
     // Collision between Hallway and Player
@@ -145,26 +170,6 @@ export class Plexus extends Scene {
 
     // Creates health bar for boss (add this to every scene for future bosses)
     this.bossHealthBar = new BossHealthBar(this, this.boss);
-  }
-
-  // Managing Timers of Phases
-  schedulePhaseEvent(delay, callback) {
-    const t = this.time.delayedCall(delay, callback);
-    this.phaseTimers.push(t);
-    return t;
-  }
-
-  schedulePhaseRepeatingEvent(config) {
-    const evt = this.time.addEvent(config);
-    this.phaseTimers.push(evt);
-    return evt;
-  }
-
-  clearPhaseTimers() {
-    for (const t of this.phaseTimers) {
-      t.remove(false);
-    }
-    this.phaseTimers = [];
   }
 
   // Setting up the order of phases and the starting of them
@@ -432,14 +437,5 @@ export class Plexus extends Scene {
 
     // Updates boss health bar
     if (this.bossHealthBar) this.bossHealthBar.update();
-  }
-
-  changeScene() {
-    // tells the timer to stop when we get a game over or change scene
-    if (this.timer) {
-      this.timer.stop();
-      this.timer.saveToRegistry();
-    }
-    this.scene.start("GameOver");
   }
 }

@@ -7,6 +7,23 @@ export class DropCircle {
     this.duration = duration;
     this.poolRadius = poolRadius;
 
+    //Drop circle animations
+    this.scene.anims.create({
+      key: "dropEffect",
+      frames: this.scene.anims.generateFrameNumbers("dropRing"),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.dropEffect = scene.add.sprite(player.x, player.y, "dropEffect");
+    this.dropEffect.play("dropEffect");
+    this.dropEffect.setDepth(19);
+
+    const scaleX = (this.poolRadius * 2) / 64;
+    const scaleY = (this.poolRadius * 2) / 57;
+    const uniformScale = Math.min(scaleX, scaleY);
+    this.dropEffect.setScale(uniformScale);
+
     // Creating a visual circle to follow the player
     this.marker = scene.add.circle(
       player.x,
@@ -32,6 +49,10 @@ export class DropCircle {
     // Follow the player coordinates in real time
     this.marker.x = this.player.x;
     this.marker.y = this.player.y;
+    if (this.dropEffect) {
+      this.dropEffect.x = this.player.x;
+      this.dropEffect.y = this.player.y;
+    }
   }
 
   spawnPool() {
@@ -45,11 +66,22 @@ export class DropCircle {
     );
     pool.setDepth(10);
 
+    // animation for the spawn pool
+    const effect = this.scene.add.sprite(pool.x, pool.y, "dropEffect");
+    effect.play("dropEffect");
+    effect.setDepth(11);
+
+    const scaleX = (this.poolRadius * 2) / 64;
+    const scaleY = (this.poolRadius * 2) / 57;
+    const uniformScale = Math.min(scaleX, scaleY);
+    effect.setScale(uniformScale);
+
     // Damage Zone logic
     this.zone = this.scene.add
       .zone(pool.x, pool.y, this.poolRadius * 2, this.poolRadius * 2)
       .setOrigin(0.5, 0.5);
     this.scene.physics.add.existing(this.zone);
+    this.zone.body.setCircle(this.poolRadius);
     this.zone.body.setAllowGravity(false);
     this.zone.body.moves = false;
 
@@ -72,6 +104,7 @@ export class DropCircle {
 
   destroy() {
     if (this.marker) this.marker.destroy();
+    if (this.dropEffect) this.dropEffect.destroy();
     this.scene.events.off("update", this.update, this);
   }
 }

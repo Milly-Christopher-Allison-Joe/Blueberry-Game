@@ -4,28 +4,29 @@ export class PlayerAbilityIcons {
     this.player = player;
 
     // For size of cooldown icons
-    this.iconSize = 45;
-    this.spacing = 3;
+    this.iconSize = 50;
+    this.spacing = 9;
 
     // This defines the abilities and their icons
     this.abilities = [
       {
         key: "dash",
-        emoji: "➔",
+        image: "dash",
         label: "dash",
+        offsetY: -8,
         getCooldown: () => player.getDashCooldown(),
         getMaxCooldown: () => player.getDashMaxCooldown(),
       },
       {
         key: "heal",
-        emoji: "✚",
+        image: "heal",
         label: "heal",
         getCooldown: () => player.getHealCooldown(),
         getMaxCooldown: () => player.getHealMaxCooldown(),
       },
       {
         key: "ranged",
-        emoji: "❈",
+        image: "ranged",
         label: "ranged",
         getCooldown: () => player.getRangedCooldown(),
         getMaxCooldown: () => player.getRangedMaxCooldown(),
@@ -37,19 +38,22 @@ export class PlayerAbilityIcons {
       const x =
         (i - (this.abilities.length - 1) / 2) * (this.iconSize + this.spacing);
 
-      // This makes emoji's work with Phaser text. Can remove if switched to sprites.
-      const emojiText = scene.add
-        .text(0, 0, ability.emoji, {
-          font: `${this.iconSize - 6}px Arial`,
-          color: "#fff",
-          align: "center",
-        })
+      // Icon border
+      const borderObject = scene.add
+        .image(0, 0, "bordericon")
+        .setDisplaySize(this.iconSize + 12, this.iconSize + 12)
+        .setOrigin(0.5);
+
+      // The icon image
+      const iconObject = scene.add
+        .image(0, ability.offsetY, ability.image)
+        .setDisplaySize(this.iconSize, this.iconSize)
         .setOrigin(0.5);
 
       // Label text centered below icons
       const labelText = scene.add
         .text(0, this.iconSize / 2 + 8, ability.label, {
-          font: "12px Arial",
+          font: "16px Pixelify Sans",
           color: "#fff",
           align: "center",
         })
@@ -60,7 +64,8 @@ export class PlayerAbilityIcons {
       const fixedX = cam.width / 2 + x;
       const fixedY = cam.height - 115;
       const container = scene.add.container(fixedX, fixedY, [
-        emojiText,
+        borderObject,
+        iconObject,
         labelText,
       ]);
       container.setScrollFactor(0);
