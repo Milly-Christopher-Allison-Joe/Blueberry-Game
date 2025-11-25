@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useAuth } from "./AuthContext";
 
 export default function Register() {
-  const [form, setForm] = useState({ username: "", password: "" });
+  // const [form, setForm] = useState({ username: "", password: "" });
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -10,8 +14,30 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: call POST /users/register in your API
-    // if success => maybe auto-login or navigate to /login
-    alert(`Pretend registered: ${form.username}`);
+    if (!form.username || !form.password) {
+      alert("Please enter both username and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+      }
+      // await register(form);
+
+      navigate("/profile");
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert(error.message || "Please try registering again.");
+    }
   };
 
   return (
