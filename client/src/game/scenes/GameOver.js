@@ -14,7 +14,7 @@ export class GameOver extends Scene {
 
     this.add
       .text(512, 384, "Game Over", {
-        fontFamily: "Arial Black",
+        fontFamily: "Pixelify Sans",
         fontSize: 64,
         color: "#ffffff",
         stroke: "#000000",
@@ -33,7 +33,7 @@ export class GameOver extends Scene {
 
     this.add
       .text(512, 480, `Time: ${formatted}`, {
-        fontFamily: "Arial",
+        fontFamily: "Pixelify Sans",
         fontSize: 32,
         color: "#ffffff",
       })
@@ -41,7 +41,7 @@ export class GameOver extends Scene {
 
     this.add
       .text(512, 530, `Boss: ${bossName}`, {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 24,
         color: "#bbbbbb",
       })
@@ -54,7 +54,7 @@ export class GameOver extends Scene {
     // Restart the Boss Button
     const restart = this.add
       .text(centerX - 200, buttonY, "Restart Boss", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 40,
         color: "#dddddd",
       })
@@ -76,7 +76,7 @@ export class GameOver extends Scene {
     // Return to the Boss Selection Screen
     const bossSelection = this.add
       .text(centerX + 200, buttonY, "Return to Boss Select", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 32,
         color: "#dddddd",
       })

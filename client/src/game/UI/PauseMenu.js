@@ -19,7 +19,7 @@ export class PauseMenu extends Scene {
     // Pause Title for the menu
     this.add
       .text(this.scale.width / 2, 200, "Paused", {
-        fontFamily: "Arial Black",
+        fontFamily: "Pixelify Sans",
         fontSize: 64,
         color: "#ffffff",
         stroke: "#000000",
@@ -30,7 +30,7 @@ export class PauseMenu extends Scene {
     // Resume button
     const resumeButton = this.add
       .text(this.scale.width / 2, 350, "Resume", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 40,
         color: "#dddddd",
       })
@@ -52,7 +52,7 @@ export class PauseMenu extends Scene {
     // Restart the Boss Button
     const restart = this.add
       .text(this.scale.width / 2, 430, "Restart", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 40,
         color: "#dddddd",
       })
@@ -77,7 +77,7 @@ export class PauseMenu extends Scene {
     // Return to the Boss Selection Screen
     const bossSelection = this.add
       .text(this.scale.width / 2, 510, "Return to Boss Select", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 32,
         color: "#dddddd",
       })

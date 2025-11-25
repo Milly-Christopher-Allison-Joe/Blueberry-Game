@@ -6,6 +6,19 @@ export function setupRanged(player, scene) {
 
   player.prevPointerDownRanged = false;
 
+  // spawning the sprite projectile and setting it's frames and framerate
+  if (!scene.anims.exists("playerRanged")) {
+    scene.anims.create({
+      key: "playerRanged",
+      frames: scene.anims.generateFrameNumbers("rangedattack", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+  }
+
   // This sets world bounds for projectile
   if (!scene.projectileWorldBoundsHandler) {
     scene.physics.world.on("worldbounds", (body) => {
@@ -41,12 +54,25 @@ export function setupRanged(player, scene) {
       Phaser.Input.Keyboard.JustDown(player.keys.ranged) &&
       player.canShoot
     ) {
-      const projectile = scene.add.circle(player.x, player.y, 5, 0xff0000);
+      const projectile = scene.add.sprite(player.x, player.y, "rangedattack");
       scene.physics.add.existing(projectile);
+      // sets the direction of the projectile to match aim
+      const angle = Phaser.Math.Angle.Between(
+        0,
+        0,
+        player.aimDirection.x,
+        player.aimDirection.y
+      );
+      projectile.rotation = angle + Math.PI;
+
+      // applies velocity to the projectile
       projectile.body.setVelocity(
         player.aimDirection.x * player.projectileSpeed,
         player.aimDirection.y * player.projectileSpeed
       );
+
+      projectile.setScale(1.6);
+      projectile.play("playerRanged");
 
       // Destroys projectile and registers damage on boss contact
       scene.physics.add.overlap(projectile, scene.boss, () => {

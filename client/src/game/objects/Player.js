@@ -23,7 +23,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     // Visual box representation (temporary until sprite assets are added)
     this.visualBox = scene.add.rectangle(x, y, 20, 20, 0xffffff);
-    this.visualBox.setDepth(20);
+    this.visualBox.setDepth(21);
+    this.setDepth(20);
 
     // Health/Damage handler
     this.damageHandler = new Damage(this, 100);

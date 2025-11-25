@@ -14,7 +14,7 @@ export class Victory extends Scene {
     // Victory Text
     this.add
       .text(512, 300, "Victory!", {
-        fontFamily: "Arial Black",
+        fontFamily: "Pixelify Sans",
         fontSize: 72,
         color: "#ffffff",
         stroke: "#000000",
@@ -32,6 +32,7 @@ export class Victory extends Scene {
     // Victory Time
     this.add
       .text(512, 400, `Time: ${formatted}`, {
+        fontFamily: "Pixelify Sans",
         fontSize: 32,
         color: "#ffffff",
       })
@@ -40,6 +41,7 @@ export class Victory extends Scene {
     // Defeated Boss Name
     this.add
       .text(512, 450, `Defeated: ${bossName}`, {
+        fontFamily: "Orbitron",
         fontSize: 28,
         color: "#dddddd",
       })
@@ -51,7 +53,7 @@ export class Victory extends Scene {
     // Restart the Boss Button
     const restart = this.add
       .text(centerX - 200, buttonY, "Restart Boss", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 40,
         color: "#dddddd",
       })
@@ -73,7 +75,7 @@ export class Victory extends Scene {
     // Return to the Boss Selection Screen
     const bossSelection = this.add
       .text(centerX + 200, buttonY, "Return to Boss Select", {
-        fontFamily: "Arial",
+        fontFamily: "Orbitron",
         fontSize: 32,
         color: "#dddddd",
       })
