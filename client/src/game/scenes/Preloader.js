@@ -1,5 +1,8 @@
 import { Scene } from "phaser";
 import background from "../../assets/background.jpg";
+import buttonSprite from "../../assets/button-sprite/buttonSprite.png";
+import mainButton from "../../assets/button-sprite/mainButton.png";
+import overButton from "../../assets/button-sprite/overButton.png";
 import dash from "../../assets/Ability Icons/dash.png";
 import heal from "../../assets/Ability Icons/heal.png";
 import ranged from "../../assets/Ability Icons/ranged.png";
@@ -48,6 +51,14 @@ export class Preloader extends Scene {
     // simple background asset
     this.load.image("background", background);
 
+    //main button sprite
+    this.load.image("mainButton", mainButton);
+
+    //game over sprite
+    this.load.image("overButton", overButton);
+
+    // load start button asset
+    this.load.image("buttonSprite", buttonSprite);
     //Plexus Hallway
     this.load.image("hallBorder", TileBorder);
     this.load.image("hallFill", TileSet);
