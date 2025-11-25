@@ -12,11 +12,32 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: call POST /users/login and validate
-    // demo: accept any non-empty creds
-    if (form.username && form.password) {
+
+    // Check for empty login fields
+    if (!form.username || !form.password) {
+      alert("Please enter both username and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        alert("Invalid username or password.");
+        return;
+      }
+
       login(form.username);
+      // await login(form);
+
       navigate("/profile");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert(error.message || "Please try logging in again.");
     }
   };
 
