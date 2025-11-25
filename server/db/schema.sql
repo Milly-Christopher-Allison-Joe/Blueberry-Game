@@ -23,3 +23,12 @@ CREATE TABLE users_boss (
     boss_id INT NOT NULL REFERENCES boss(id) ON DELETE CASCADE,
     completion_time INTERVAL NOT NULL
 );
+
+-- Table to connect users, scores, and bosses
+CREATE TABLE user_boss_scores (
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  boss_id INT REFERENCES boss(id) ON DELETE CASCADE,
+  best_time FLOAT,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, boss_id)
+);
