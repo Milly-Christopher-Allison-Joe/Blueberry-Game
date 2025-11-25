@@ -45,6 +45,15 @@ export class Victory extends Scene {
       })
       .setOrigin(0.5);
 
+    // Creates an event with the timer to grab in React
+    if (finalTime && bossKey) {
+      window.dispatchEvent(
+        new CustomEvent("submit-highscore", {
+          detail: { bossId: bossKey, time: finalTime },
+        })
+      );
+    }
+
     const centerX = this.scale.width / 2;
     const buttonY = 620;
 
