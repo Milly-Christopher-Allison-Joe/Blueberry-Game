@@ -49,6 +49,13 @@ export class Victory extends Scene {
 
     // Creates an event with the timer to grab in React
     if (finalTime && bossKey) {
+      // console.log("About to dispatch submit-highscore event");
+      window.dispatchEvent(
+        new CustomEvent("submit-highscore", {
+          detail: { bossId: bossKey, time: finalTime },
+        })
+      );
+      // console.log("submit-highscore event dispatched");
       window.dispatchEvent(
         new CustomEvent("submit-highscore", {
           detail: { bossId: bossKey, time: finalTime },

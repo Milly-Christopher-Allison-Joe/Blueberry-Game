@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { getUserHighScores } from "../db/queries/highscore.js";
 import {
   upsertUserBossScore,
   getUserBossScore,
@@ -7,6 +8,20 @@ import getUserFromToken from "../middleware/getUserFromToken.js";
 import requireUser from "../middleware/requireUser.js";
 
 const router = Router();
+
+router.get("/", async (req, res) => {
+  const { userId } = req.query;
+  console.log("GET /api/highscore userId:", userId);
+  if (!userId) return res.status(400).json([]);
+  try {
+    const scores = await getUserHighScores(userId);
+    // console.log("Scores result:", scores);
+    res.json(scores);
+  } catch (err) {
+    // console.error("Highscore GET error:", err);
+    res.status(500).json([]);
+  }
+});
 
 // This is the route for upserting users completion time
 // Set so scores only post to profile if user is logged in

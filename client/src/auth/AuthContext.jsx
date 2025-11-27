@@ -1,5 +1,6 @@
+// console.log("Token in localStorage at mount:", localStorage.getItem("token"));
 import { createContext, useMemo, useContext, useState, useEffect } from "react";
-import * as jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -11,11 +12,31 @@ export function AuthProvider({ children }) {
   const user = useMemo(() => {
     if (!token) return null;
     try {
-      return jwt_decode.default(token);
+      return jwtDecode(token);
     } catch {
       return null;
     }
   }, [token]);
+
+  // here be dragons
+  // const user = useMemo(() => {
+  //   if (!token) return null;
+  //   try {
+  //     const base64Url = token.split(".")[1];
+  //     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  //     const jsonPayload = decodeURIComponent(
+  //       atob(base64)
+  //         .split("")
+  //         .map(function (c) {
+  //           return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+  //         })
+  //         .join("")
+  //     );
+  //     return JSON.parse(jsonPayload);
+  //   } catch {
+  //     return null;
+  //   }
+  // }, [token]);
 
   // Saves token to local whenever it changes
   useEffect(() => {
@@ -53,6 +74,9 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => setToken(null);
+
+  // console.log("AuthContext token:", token);
+  // console.log("AuthContext user:", user);
 
   const value = { token, user, register, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

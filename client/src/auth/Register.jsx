@@ -1,43 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { useAuth } from "./AuthContext";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
-  const { register } = useAuth();
+  const { register, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: call POST /users/register in your API
     if (!form.username || !form.password) {
       alert("Please enter both username and password.");
       return;
     }
 
     try {
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      let data = null;
-      const text = await response.text();
-      if (text) {
-        data = JSON.parse(text);
-      }
-
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-      }
-      // await register(form);
-
-      navigate("/profile");
+      await register(form);
     } catch (error) {
       console.error("Registration error:", error);
       alert(error.message || "Please try registering again.");

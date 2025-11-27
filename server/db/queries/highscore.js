@@ -1,10 +1,12 @@
+import express from "express";
 import db from "../client.js";
+const router = express.Router();
 
 // This gets users best time for specific boss
 export async function getUserBossScore(userId, bossId) {
   const result = await db.query(
-    `SELECT best_time FROM user_boss_scores WHERE user_id = $1 AND boss_id = $2`,
-    [userId, bossId]
+    "SELECT * FROM user_boss_scores WHERE user_id = $1 ORDER BY best_time ASC",
+    [userId]
   );
   return result.rows[0]?.best_time || null;
 }
@@ -21,10 +23,20 @@ export async function upsertUserBossScore(userId, bossId, newTime) {
   );
 }
 
-// Get all best times for a user
+// Get all best times for all users
 export async function getAllUserScores(userId) {
   const result = await db.query(
     `SELECT boss_id, best_time FROM user_boss_scores WHERE user_id = $1`,
+    [userId]
+  );
+  return result.rows;
+}
+
+// Fetch all scores for a user (for profile display)
+export async function getUserHighScores(userId) {
+  if (!userId) throw new Error("Missing userId");
+  const result = await db.query(
+    "SELECT * FROM user_boss_scores WHERE user_id = $1 ORDER BY best_time ASC",
     [userId]
   );
   return result.rows;
