@@ -16,9 +16,9 @@ export default function Home() {
 
   useEffect(() => {
     function handleHighscoreEvent(e) {
-      console.log("submit-highscore event received", e.detail);
-      console.log("bossKeyToId:", bossKeyToId);
-      console.log("user:", user);
+      // console.log("submit-highscore event received", e.detail);
+      // console.log("bossKeyToId:", bossKeyToId);
+      // console.log("user:", user);
       const { bossId: bossKey, time } = e.detail;
       const bossId = bossKeyToId[bossKey];
       if (!bossId || !user?.id) return;
