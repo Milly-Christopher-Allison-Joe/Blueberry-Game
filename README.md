@@ -45,6 +45,26 @@ With those installed, all you need to do is install the game's dependencies with
 npm install
 ```
 
+Full list of dependencies if you need to manually install:
+
+@eslint, eslint, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals --Used for checking errors and enforcing style rules during development
+
+@vitejs/plugin-react-swc, vite --Frontend build tool
+
+bcrypt --Used to securely hash passwords
+
+dotenv --Lets you use .env files to store variables
+
+express --Web server framework for backend API
+
+jsonwebtoken, jwt-decode --Used to create and verity JWTs
+
+pg --PostgreSQL client for Node.js
+
+phaser --This is the game engine!
+
+react, react-dom, react-router-dom --Frontend library and navigation
+
 Then to start a local server to run the game for you it's a simple as:
 
 ```
@@ -55,7 +75,18 @@ The game will then be accessible at `http://localhost:5173/`.
 
 ### Accessing API Functionality
 
-To be filled out by Chris/Allison?
+If you want to access the API during gameplay (register, login, and save highscores!) you'll need the backend server as well!
+
+Make sure you set up your .env file
+
+In a separate CLI use:
+
+```
+node server.js
+```
+
+To see any changes made to the backend you'll need to reboot the server.
+
 
 ## Credits
 
