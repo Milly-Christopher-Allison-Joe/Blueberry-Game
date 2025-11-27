@@ -4,7 +4,7 @@
 
 Inspired by [Pineapple Game](https://tacticalairhorse.itch.io/nerubar-palace), a browser game on itch.io designed to help teach people the mechanics of World of Warcraft bosses in a safe and fun environment.
 
-[](https://github.com/Milly-Christopher-Allison-Joe/blueberry/tree/dev/client/public/BlueberryGame.gif)
+![](https://github.com/Milly-Christopher-Allison-Joe/blueberry/tree/dev/client/public/BlueberryGame.gif)
 
 ### Gameplay Mechanics
 
