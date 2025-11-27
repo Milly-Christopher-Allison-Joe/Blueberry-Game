@@ -16,6 +16,11 @@ import dropRing from "../../assets/boss attacks/dropRing.png";
 import soakRing from "../../assets/boss attacks/soakRing.png";
 import TileBorder from "../../assets/scene textures/IndustrialTile_05.png";
 import TileSet from "../../assets/scene textures/IndustrialTile_14.png";
+import Q from "../../assets/keyboard icons/Q.png";
+import F from "../../assets/keyboard icons/F.png";
+import SPACE from "../../assets/keyboard icons/SPACEALTERNATIVE.png";
+import Player from "../../assets/Character Assets/Player.png";
+import PlexusSprite from "../../assets/Character Assets/plexus.png";
 
 export class Preloader extends Scene {
   constructor() {
@@ -74,6 +79,23 @@ export class Preloader extends Scene {
 
     // Icon border
     this.load.image("bordericon", bordericon);
+
+    // Keyboard Icons for Cooldowns
+    this.load.image("Qkey", Q);
+    this.load.image("Fkey", F);
+    this.load.image("SPACEkey", SPACE);
+
+    // Player Sprite
+    this.load.spritesheet("player", Player, {
+      frameWidth: 338,
+      frameHeight: 478,
+    });
+
+    // Boss Sprite
+    this.load.spritesheet("PlexusSprite", PlexusSprite, {
+      frameWidth: 1024,
+      frameHeight: 1023,
+    });
 
     // Player Slash Animation
     this.load.spritesheet("melee", slash, {

@@ -10,21 +10,39 @@ import { PlayerAbilityIcons } from "../UI/PlayerAbilityIcons.js";
 // Entire player class, handles movement, inputs, and visuals
 export class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, null);
+    super(scene, x, y, "player");
 
     // Add to scene's display list and physics
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
     // Configure physics body for player PLACEHOLDER
-    this.setSize(20, 20);
-    this.setTint(0xffffff);
+    this.setScale(0.115);
+    this.setDepth(20);
     this.setCollideWorldBounds(true);
 
-    // Visual box representation (temporary until sprite assets are added)
-    this.visualBox = scene.add.rectangle(x, y, 20, 20, 0xffffff);
-    this.visualBox.setDepth(21);
-    this.setDepth(20);
+    //Animations for the movement
+    scene.anims.create({
+      key: "playerIdle",
+      frames: scene.anims.generateFrameNumbers("player", { start: 0, end: 0 }),
+      frameRate: 6,
+      repeat: -1,
+    });
+
+    scene.anims.create({
+      key: "playerRun",
+      frames: scene.anims.generateFrameNumbers("player", { start: 0, end: 1 }),
+      frameRate: 6,
+      repeat: -1,
+    });
+
+    // defaults to idle animation
+    this.play("playerIdle");
+
+    // Shadow under player
+    this.shadow = scene.add.ellipse(x, y + 15, 45, 15, 0x000000, 0.35);
+    this.shadow.setDepth(5); // below player
+    this.shadow.setScrollFactor(1);
 
     // Health/Damage handler
     this.damageHandler = new Damage(this, 100);
@@ -87,7 +105,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       this.meleeHandler();
       this.rangedHandler(this.scene.game.loop.delta); // Updated for ranged UI
       this.handleMovement();
-      this.syncVisualBox();
       this.healHandler(this.scene.game.loop.delta); // Updated for heal UI
       this.healthBar.setPosition(this.x, this.y);
       this.playerAbilityIcons.update();
@@ -96,6 +113,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.damageHandler.takeDamage(20);
         this.healthBar.update();
       }
+    }
+
+    if (this.shadow) {
+      this.shadow.x = this.x;
+      this.shadow.y = this.y + 28;
     }
   }
 
@@ -126,8 +148,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       moveY = 1;
     }
 
-    // Normalize diagonal movement so it's not faster
     const length = Math.sqrt(moveX * moveX + moveY * moveY);
+    const isMoving = length > 0;
+
+    // Adding in the movement frames when moving
+    if (isMoving) {
+      if (this.anims.currentAnim?.key !== "playerRun") {
+        this.play("playerRun", true);
+      }
+    } else {
+      if (this.anims.currentAnim?.key !== "playerIdle") {
+        this.play("playerIdle", true);
+      }
+    }
+
+    // Normalize diagonal movement so it's not faster
     if (length > 0) {
       moveX /= length;
       moveY /= length;
@@ -156,19 +191,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.aimDirection.y = Math.sin(this.aimAngle);
   }
 
-  // Sync for visual box position with physics
-  syncVisualBox() {
-    if (this.visualBox) {
-      this.visualBox.x = this.x;
-      this.visualBox.y = this.y;
-    }
-  }
-
   // Clean up after player is destroyed
   destroy() {
-    if (this.visualBox) {
-      this.visualBox.destroy();
-    }
     super.destroy();
   }
 }
