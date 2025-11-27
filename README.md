@@ -2,9 +2,9 @@
 
 ### Top Down Boss Arena Game
 
-Inspired by [Pineapple Game](https://tacticalairhorse.itch.io/nerubar-palace), a browser game on itch.io designed to help teach people the mechanics of World of Warcraft bosses in a safe and fun environment.
-
 ![](client/public/BlueberryGame.gif)
+
+Inspired by [Pineapple Game](https://tacticalairhorse.itch.io/nerubar-palace), a browser game on itch.io designed to help teach people the mechanics of World of Warcraft bosses in a safe and fun environment.
 
 ### Gameplay Mechanics
 
@@ -21,6 +21,8 @@ Blueberry game is built on React for the front end website, Phaser for the game'
 The game's logic is handled solely in the front end within a container within React while the backend server is used to store data about a user should they choose to make an account. It's main purpose is to save your best completed time for each boss!
 
 ### How to Play!
+
+<img src="client/public/BlueBerry.png" width=150>
 
 - Use <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> to move.
 - <kbd>SPACE</kbd> to dash!
