@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import background from "../../assets/background.jpg";
+import victorySprite from "../../assets/button-sprite/victorySprite.png";
 import buttonSprite from "../../assets/button-sprite/buttonSprite.png";
 import mainButton from "../../assets/button-sprite/mainButton.png";
 import overButton from "../../assets/button-sprite/overButton.png";
@@ -58,6 +59,9 @@ export class Preloader extends Scene {
 
     //main button sprite
     this.load.image("mainButton", mainButton);
+
+    // victory sprite
+    this.load.image("victorySprite", victorySprite);
 
     //game over sprite
     this.load.image("overButton", overButton);
