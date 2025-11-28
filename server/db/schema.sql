@@ -12,6 +12,7 @@ CREATE TABLE users (
 -- BOSS TABLE
 CREATE TABLE boss (
     id SERIAL PRIMARY KEY,
+    key TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     base_time INTERVAL
 );

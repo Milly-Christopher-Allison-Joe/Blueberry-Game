@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/profile");
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -20,23 +26,8 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch("/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (!response.ok) {
-        alert("Invalid username or password.");
-        return;
-      }
-
-      login(form.username);
-      // await login(form);
-
-      navigate("/profile");
+      await login(form);
     } catch (error) {
-      console.error("Login error:", error);
       alert(error.message || "Please try logging in again.");
     }
   };
