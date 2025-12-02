@@ -6,6 +6,10 @@
 
 Inspired by [Pineapple Game](https://tacticalairhorse.itch.io/nerubar-palace), a browser game on itch.io designed to help teach people the mechanics of World of Warcraft bosses in a safe and fun environment.
 
+### Live Demo
+
+A playable demo of the current Blueberry Game can be found [here](https://blueberry-game-50a0b6fddbc3.herokuapp.com/)!
+
 ### Gameplay Mechanics
 
 Blueberry Game is designed to be a quick to understand game to people already familiar with the basics of video games and especially World of Warcraft. The bosses are directly inspired by bosses from the lastest raids, with the first finished being Plexus Sentinel from Manaforge Omega.
