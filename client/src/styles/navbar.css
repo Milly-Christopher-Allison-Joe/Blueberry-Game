@@ -1,0 +1,65 @@
+:root {
+  --bg: #0f172a; /* slate-900 */
+  --fg: #e2e8f0; /* slate-200 */
+  --accent: #38bdf8; /* sky-400 */
+  --accent-2: #22c55e; /* green-500 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+}
+
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--fg);
+  letter-spacing: 0.3px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Active route style via NavLink */
+.nav-link[aria-current="page"] {
+  background: rgba(56, 189, 248, 0.18);
+  outline: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  color: var(--fg);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}

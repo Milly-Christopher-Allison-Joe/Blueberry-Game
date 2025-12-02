@@ -1,0 +1,114 @@
+export class PlayerAbilityIcons {
+  constructor(scene, player) {
+    this.scene = scene;
+    this.player = player;
+
+    // For size of cooldown icons
+    this.iconSize = 50;
+    this.spacing = 15;
+
+    // This defines the abilities and their icons
+    this.abilities = [
+      {
+        key: "heal",
+        image: "heal",
+        keyImage: "Qkey",
+        label: "heal",
+        getCooldown: () => player.getHealCooldown(),
+        getMaxCooldown: () => player.getHealMaxCooldown(),
+      },
+      {
+        key: "dash",
+        image: "dash",
+        keyImage: "SPACEkey",
+        keyOffsetX: 28,
+        label: "dash",
+        offsetY: -8,
+        getCooldown: () => player.getDashCooldown(),
+        getMaxCooldown: () => player.getDashMaxCooldown(),
+      },
+      {
+        key: "ranged",
+        image: "ranged",
+        keyImage: "Fkey",
+        label: "ranged",
+        getCooldown: () => player.getRangedCooldown(),
+        getMaxCooldown: () => player.getRangedMaxCooldown(),
+      },
+    ];
+
+    // This creates containters for the icons
+    this.icons = this.abilities.map((ability, i) => {
+      const x =
+        (i - (this.abilities.length - 1) / 2) * (this.iconSize + this.spacing);
+
+      // Icon border
+      const borderObject = scene.add
+        .image(0, 0, "bordericon")
+        .setDisplaySize(this.iconSize + 12, this.iconSize + 12)
+        .setOrigin(0.5);
+
+      // The icon image
+      const iconObject = scene.add
+        .image(0, ability.offsetY, ability.image)
+        .setDisplaySize(this.iconSize, this.iconSize)
+        .setOrigin(0.5);
+
+      // Keyboard icons for each ability
+      let keyObject = null;
+
+      if (ability.keyImage) {
+        // Special-case dash key size
+        const isDash = ability.key === "dash";
+
+        keyObject = scene.add
+          .image(ability.keyOffsetX ?? 13, -35, ability.keyImage)
+          .setDisplaySize(isDash ? 55 : 25, 25) // ← wider only for dash
+          .setOrigin(1);
+      }
+
+      // Label text centered below icons
+      const labelText = scene.add
+        .text(0, this.iconSize / 2 + 8, ability.label, {
+          font: "16px Pixelify Sans",
+          color: "#fff",
+          align: "center",
+        })
+        .setOrigin(0.5, 0);
+
+      // Icons are at bottom left of the screen
+      const cam = scene.cameras.main;
+      const fixedX = cam.width / 2 + x;
+      const fixedY = cam.height - 115;
+      const container = scene.add.container(fixedX, fixedY, [
+        borderObject,
+        iconObject,
+        keyObject,
+        labelText,
+      ]);
+      container.setScrollFactor(0);
+      container.setDepth(10000);
+
+      return { container, ability, x };
+    });
+  }
+
+  // This updates icon positions and fade effect for cooldowns
+  update() {
+    this.icons.forEach(({ container, ability }) => {
+      const cooldown = ability.getCooldown();
+      const maxCooldown = ability.getMaxCooldown();
+
+      // Fade icon if on cooldown, fully visible if ready
+      if (cooldown > 0 && maxCooldown > 0) {
+        container.alpha = 0.2;
+      } else {
+        container.alpha = 1;
+      }
+    });
+  }
+  // Here just in case. Shouldn't be necessary but could help prevent memory leak.
+  destroy() {
+    this.icons.forEach(({ container }) => container.destroy());
+  }
+}
