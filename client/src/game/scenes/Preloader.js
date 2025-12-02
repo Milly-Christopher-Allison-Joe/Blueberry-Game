@@ -10,7 +10,7 @@ import ranged from "../../assets/abilityIcons/ranged.png";
 import bordericon from "../../assets/abilityIcons/Border1.png";
 import slash from "../../assets/playerAttacks/Slash.png";
 import rangedattack from "../../assets/playerAttacks/rangedattack.png";
-import KSbeam from "../../assets/bossAttacks/KSBeam.png";
+import KSbeam from "../../assets/bossAttacks/KSbeam.png";
 import KSstart from "../../assets/bossAttacks/KSstart.png";
 import KLbeam from "../../assets/bossAttacks/KLBeam.png";
 import dropRing from "../../assets/bossAttacks/dropRing.png";
