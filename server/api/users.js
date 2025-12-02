@@ -15,7 +15,7 @@ router.post(
     try {
       const { username, password } = req.body;
       const user = await createUser(username, password);
-      const token = await createToken({ id: user.id });
+      const token = await createToken({ id: user.id, username: user.username });
 
       res.status(201).json({ token });
     } catch (error) {
@@ -39,7 +39,7 @@ router.post(
           .status(401)
           .json({ message: "Invalid username or password." });
 
-      const token = await createToken({ id: user.id });
+      const token = await createToken({ id: user.id, username: user.username });
 
       res.status(200).json({ token });
     } catch (error) {
