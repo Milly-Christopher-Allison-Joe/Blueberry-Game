@@ -8,7 +8,7 @@ import dash from "../../assets/abilityIcons/dash.png";
 import heal from "../../assets/abilityIcons/heal.png";
 import ranged from "../../assets/abilityIcons/ranged.png";
 import bordericon from "../../assets/abilityIcons/Border1.png";
-import slash from "../../assets/playerAttacks/slash.png";
+import slash from "../../assets/playerAttacks/Slash.png";
 import rangedattack from "../../assets/playerAttacks/rangedattack.png";
 import KSbeam from "../../assets/bossAttacks/KSbeam.png";
 import KSstart from "../../assets/bossAttacks/KSstart.png";
