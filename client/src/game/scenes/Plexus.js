@@ -129,40 +129,40 @@ export class Plexus extends BossScene {
     // Create the kill line laser wall
     this.killLine = new KillLine(this, bossX + 150, worldHeight / 2);
 
-    // DEBUG: Press P to jump to Phase 2
-    this.input.keyboard.on("keydown-P", () => {
-      console.warn("DEBUG: Skipping to Phase 2");
-      this.currentPhase = 2;
-      this.phaseActive = false;
-      this.startNextPhase();
-    });
+    // // DEBUG: Press P to jump to Phase 2
+    // this.input.keyboard.on("keydown-P", () => {
+    //   console.warn("DEBUG: Skipping to Phase 2");
+    //   this.currentPhase = 2;
+    //   this.phaseActive = false;
+    //   this.startNextPhase();
+    // });
 
-    // DEBUG: Press O to jump to Phase 3
-    this.input.keyboard.on("keydown-O", () => {
-      console.warn("DEBUG: Skipping to Phase 3");
-      this.currentPhase = 3;
-      this.phaseActive = false;
-      this.startNextPhase();
-    });
+    // // DEBUG: Press O to jump to Phase 3
+    // this.input.keyboard.on("keydown-O", () => {
+    //   console.warn("DEBUG: Skipping to Phase 3");
+    //   this.currentPhase = 3;
+    //   this.phaseActive = false;
+    //   this.startNextPhase();
+    // });
 
-    // DEBUG: Press L to jump to Phase 4
-    this.input.keyboard.on("keydown-L", () => {
-      console.warn("DEBUG: Skipping to Phase 4");
-      this.currentPhase = 4;
-      this.phaseActive = false;
-      this.startNextPhase();
-    });
+    // // DEBUG: Press L to jump to Phase 4
+    // this.input.keyboard.on("keydown-L", () => {
+    //   console.warn("DEBUG: Skipping to Phase 4");
+    //   this.currentPhase = 4;
+    //   this.phaseActive = false;
+    //   this.startNextPhase();
+    // });
 
-    // DEBUG: Press V to instantly trigger Victory
-    this.input.keyboard.on("keydown-V", () => {
-      console.warn("DEBUG: Triggering Victory Screen");
-      this.changeScene("victory");
-    });
+    // // DEBUG: Press V to instantly trigger Victory
+    // this.input.keyboard.on("keydown-V", () => {
+    //   console.warn("DEBUG: Triggering Victory Screen");
+    //   this.changeScene("victory");
+    // });
 
-    // DEBUG: Press N to set music to end
-    this.input.keyboard.on("keydown-N", () => {
-      this.music.setSeek(120);
-    });
+    // // DEBUG: Press N to set music to end
+    // this.input.keyboard.on("keydown-N", () => {
+    //   this.music.setSeek(120);
+    // });
 
     // Collision between Hallway and Player
     this.physics.add.collider(this.player, this.hallway);
