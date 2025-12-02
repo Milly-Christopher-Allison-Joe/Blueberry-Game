@@ -8,6 +8,37 @@ await db.end();
 console.log("🌱 Database seeded.");
 
 async function seed() {
+  await db.query("DROP TABLE IF EXISTS users_boss;");
+  await db.query("DROP TABLE IF EXISTS user_boss_scores;");
+  await db.query("DROP TABLE IF EXISTS boss;");
+  await db.query("DROP TABLE IF EXISTS users;");
+  await db.query(`
+    CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+    `);
+  await db.query(`CREATE TABLE boss (
+    id SERIAL PRIMARY KEY,
+    key TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    level INTEGER DEFAULT 0,
+    base_time INTERVAL
+);`);
+  await db.query(`CREATE TABLE users_boss (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    boss_id INT NOT NULL REFERENCES boss(id) ON DELETE CASCADE,
+    completion_time INTERVAL NOT NULL
+);`);
+  await db.query(`CREATE TABLE user_boss_scores (
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  boss_id INT REFERENCES boss(id) ON DELETE CASCADE,
+  best_time FLOAT,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, boss_id)
+);`);
   // INSERT MULTIPLE USERS WITH HASHED PASSWORDS
   const password = await bcrypt.hash("password123", 10);
   const userResult = await db.query(
