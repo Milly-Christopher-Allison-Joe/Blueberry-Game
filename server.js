@@ -1,6 +1,6 @@
 import "dotenv/config";
 console.log("DATABASE_URL:", process.env.DATABASE_URL);
-
+import express from "express";
 import app from "./app.js";
 import db from "./server/db/client.js";
 import "dotenv/config";
@@ -16,9 +16,9 @@ const PORT = process.env.PORT || 3000;
 try {
   await db.connect();
 
-  app.use(express.static(path.join(__dirname, "client/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+  app.use(express.static(path.join(__dirname, "dist")));
+  app.get("/*splat", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
   });
 
   app.use("/api/users", usersRouter);
