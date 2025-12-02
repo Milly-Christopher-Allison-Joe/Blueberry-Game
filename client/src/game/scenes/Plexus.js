@@ -16,6 +16,12 @@ export class Plexus extends BossScene {
   create() {
     super.create();
 
+    // Scene music for boss fight
+    this.music = this.sound.add("plexusTheme", {
+      volume: 0.2,
+    });
+    this.music.play();
+
     const worldWidth = 4000;
     const worldHeight = 800;
     const hallwayY = worldHeight / 2;
@@ -153,9 +159,9 @@ export class Plexus extends BossScene {
       this.changeScene("victory");
     });
 
-    //DEBUG: Press N to trigger soakCircle
+    // DEBUG: Press N to set music to end
     this.input.keyboard.on("keydown-N", () => {
-      this.boss.startKillSweep(this.player);
+      this.music.setSeek(120);
     });
 
     // Collision between Hallway and Player
@@ -170,6 +176,24 @@ export class Plexus extends BossScene {
 
     // Creates health bar for boss (add this to every scene for future bosses)
     this.bossHealthBar = new BossHealthBar(this, this.boss);
+
+    // Stop music
+    this.events.on("shutdown", () => {
+      if (this.music) this.music.stop();
+    });
+    this.events.on("destroy", () => {
+      if (this.music) this.music.stop();
+    });
+
+    // Pause music when the scene is paused
+    this.events.on("pause", () => {
+      if (this.music) this.music.pause();
+    });
+
+    // Resume music when the scene resumes
+    this.events.on("resume", () => {
+      if (this.music) this.music.resume();
+    });
   }
 
   // Setting up the order of phases and the starting of them
@@ -437,5 +461,18 @@ export class Plexus extends BossScene {
 
     // Updates boss health bar
     if (this.bossHealthBar) this.bossHealthBar.update();
+
+    // times for looping the song
+    const LOOP_START = 34; // 0:34
+    const LOOP_END = 125; // 2:05
+
+    // Looping the music
+    if (this.music) {
+      const t = this.music.seek;
+
+      if (t >= LOOP_END) {
+        this.music.setSeek(LOOP_START);
+      }
+    }
   }
 }

@@ -22,6 +22,7 @@ import F from "../../assets/keyboard icons/F.png";
 import SPACE from "../../assets/keyboard icons/SPACEALTERNATIVE.png";
 import Player from "../../assets/Character Assets/Player.png";
 import PlexusSprite from "../../assets/Character Assets/plexus.png";
+import PlexusTheme from "../../assets/audio tracks/PlexusTheme.mp3";
 
 export class Preloader extends Scene {
   constructor() {
@@ -141,6 +142,9 @@ export class Preloader extends Scene {
       frameWidth: 64,
       frameHeight: 57,
     });
+
+    // Audio track for Plexus Boss
+    this.load.audio("plexusTheme", PlexusTheme);
   }
 
   create() {
