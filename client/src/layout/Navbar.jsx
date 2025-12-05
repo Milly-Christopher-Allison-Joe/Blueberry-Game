@@ -1,9 +1,15 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 
 export default function Navbar() {
   const { token, logout, user } = useAuth();
   const isLoggedIn = !!user;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav className="navbar">
@@ -40,7 +46,7 @@ export default function Navbar() {
             <NavLink to="/profile" className="nav-link">
               Profile
             </NavLink>
-            <button className="logout-btn" onClick={logout}>
+            <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
